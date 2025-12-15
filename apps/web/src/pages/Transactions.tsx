@@ -10,35 +10,31 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2 } from "lucide-react";
+import { Loader2, ChevronLeft, ChevronRight } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-
-interface Transaction {
-  id: number;
-  date: string;
-  description: string;
-  amount: number;
-  balance: number;
-  category: string | null;
-}
+import { Button } from "@/components/ui/button";
+import { PaginatedResult, Transaction } from "@wife-happifier/shared";
 
 const API_URL = "http://localhost:3000";
 
 export default function Transactions() {
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [data, setData] = useState<PaginatedResult<Transaction> | null>(null);
+  const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   // Context from Layout to trigger refresh
   const { refreshTrigger } = useOutletContext<{ refreshTrigger: number }>();
 
-  const fetchTransactions = async () => {
+  const fetchTransactions = async (pageNum: number) => {
     setLoading(true);
     try {
-      const res = await fetch(`${API_URL}/transactions`);
+      const res = await fetch(
+        `${API_URL}/transactions?page=${pageNum}&limit=10`
+      );
       if (!res.ok) throw new Error("Failed to fetch");
-      const data = await res.json();
-      setTransactions(data);
+      const result = await res.json();
+      setData(result);
       setError(null);
     } catch (err) {
       console.error(err);
@@ -49,8 +45,16 @@ export default function Transactions() {
   };
 
   useEffect(() => {
-    fetchTransactions();
-  }, [refreshTrigger]); // Re-fetch when refreshTrigger changes
+    fetchTransactions(page);
+  }, [refreshTrigger, page]);
+
+  const handlePrevious = () => {
+    if (page > 1) setPage((p) => p - 1);
+  };
+
+  const handleNext = () => {
+    if (data && page < data.meta.lastPage) setPage((p) => p + 1);
+  };
 
   return (
     <div className="space-y-6">
@@ -69,7 +73,9 @@ export default function Transactions() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle>All Transactions</CardTitle>
-            <Badge variant="secondary">{transactions.length} records</Badge>
+            <Badge variant="secondary">
+              {data ? data.meta.total : 0} records
+            </Badge>
           </div>
         </CardHeader>
         <CardContent>
@@ -91,7 +97,7 @@ export default function Transactions() {
                       <Loader2 className="h-6 w-6 animate-spin mx-auto text-gray-400" />
                     </TableCell>
                   </TableRow>
-                ) : transactions.length === 0 ? (
+                ) : !data || data.data.length === 0 ? (
                   <TableRow>
                     <TableCell
                       colSpan={5}
@@ -101,7 +107,7 @@ export default function Transactions() {
                     </TableCell>
                   </TableRow>
                 ) : (
-                  transactions.map((t) => (
+                  data.data.map((t) => (
                     <TableRow key={t.id}>
                       <TableCell className="font-medium whitespace-nowrap">
                         {t.date}
@@ -134,6 +140,29 @@ export default function Transactions() {
                 )}
               </TableBody>
             </Table>
+          </div>
+          <div className="flex items-center justify-end space-x-2 py-4">
+            <div className="text-sm text-muted-foreground">
+              Page {page} of {data?.meta.lastPage || 1}
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handlePrevious}
+              disabled={page <= 1 || loading}
+            >
+              <ChevronLeft className="h-4 w-4" />
+              Previous
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleNext}
+              disabled={!data || page >= data.meta.lastPage || loading}
+            >
+              Next
+              <ChevronRight className="h-4 w-4" />
+            </Button>
           </div>
         </CardContent>
       </Card>

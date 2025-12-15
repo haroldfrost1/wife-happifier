@@ -1,4 +1,6 @@
 import { Button } from "@/components/ui/button";
+import { Toaster } from "@/components/ui/sonner";
+import { toast } from "sonner";
 import {
   Dialog,
   DialogContent,
@@ -76,10 +78,10 @@ export default function Layout() {
       // Success
       setIsUploadOpen(false);
       setRefreshTrigger((prev) => prev + 1); // Trigger refresh
-      alert("Upload successful");
+      toast.success("Upload successful");
     } catch (err) {
       console.error(err);
-      alert("Failed to upload CSV");
+      toast.error("Failed to upload CSV");
     } finally {
       setUploading(false);
     }
@@ -222,6 +224,7 @@ export default function Layout() {
       <main className="container mx-auto p-4 md:p-8">
         <Outlet context={{ refreshTrigger }} />
       </main>
+      <Toaster richColors />
     </div>
   );
 }

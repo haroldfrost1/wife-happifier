@@ -5,7 +5,9 @@ import {
   UseInterceptors,
   UploadedFile,
   Body,
+  Query,
 } from '@nestjs/common';
+import { PaginatedResult } from '@wife-happifier/shared';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { TransactionsService } from './transactions.service';
 import { Transaction } from './transaction.entity';
@@ -15,8 +17,11 @@ export class TransactionsController {
   constructor(private readonly transactionsService: TransactionsService) {}
 
   @Get()
-  findAll(): Promise<Transaction[]> {
-    return this.transactionsService.findAll();
+  findAll(
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+  ): Promise<PaginatedResult<Transaction>> {
+    return this.transactionsService.findAll(Number(page), Number(limit));
   }
 
   @Post('upload')
