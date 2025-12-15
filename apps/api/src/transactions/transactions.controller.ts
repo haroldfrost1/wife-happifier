@@ -4,6 +4,7 @@ import {
   Post,
   UseInterceptors,
   UploadedFile,
+  Body,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { TransactionsService } from './transactions.service';
@@ -20,10 +21,13 @@ export class TransactionsController {
 
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
-  uploadFile(@UploadedFile() file: Express.Multer.File) {
+  uploadFile(
+    @UploadedFile() file: Express.Multer.File,
+    @Body('bankId') bankId: string = 'default',
+  ) {
     if (!file) {
       throw new Error('No file uploaded');
     }
-    return this.transactionsService.import(file.buffer);
+    return this.transactionsService.import(file.buffer, bankId);
   }
 }

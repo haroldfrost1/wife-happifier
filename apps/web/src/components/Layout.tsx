@@ -12,12 +12,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
-  LayoutDashboard,
-  Loader2,
-  Menu,
-  Upload,
-  Wallet
-} from "lucide-react";
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { LayoutDashboard, Loader2, Menu, Upload, Wallet } from "lucide-react";
 import { useRef, useState } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 
@@ -48,6 +49,7 @@ export default function Layout() {
 
   // Upload State
   const [isUploadOpen, setIsUploadOpen] = useState(false);
+  const [bankId, setBankId] = useState("stgeorge");
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -62,6 +64,7 @@ export default function Layout() {
     setUploading(true);
     const formData = new FormData();
     formData.append("file", file);
+    formData.append("bankId", bankId);
 
     try {
       const res = await fetch(`${API_URL}/transactions/upload`, {
@@ -135,6 +138,21 @@ export default function Layout() {
                     </DialogDescription>
                   </DialogHeader>
                   <div className="grid gap-4 py-4">
+                    <div className="grid w-full max-w-sm items-center gap-1.5">
+                      <Label htmlFor="bank">Bank</Label>
+                      <Select
+                        value={bankId}
+                        onValueChange={setBankId}
+                        defaultValue="stgeorge"
+                      >
+                        <SelectTrigger id="bank">
+                          <SelectValue placeholder="Select Bank" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="stgeorge">St. George</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
                     <div className="grid w-full max-w-sm items-center gap-1.5">
                       <Label htmlFor="csv">CSV File</Label>
                       <Input
