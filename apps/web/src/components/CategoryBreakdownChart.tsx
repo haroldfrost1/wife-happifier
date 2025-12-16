@@ -20,7 +20,7 @@ export const CategoryBreakdownChart: React.FC<CategoryBreakdownChartProps> = ({
 
     const width = 450;
     const height = 450;
-    const margin = 40;
+    const margin = 150;
 
     const radius = Math.min(width, height) / 2 - margin;
 
@@ -70,40 +70,86 @@ export const CategoryBreakdownChart: React.FC<CategoryBreakdownChartProps> = ({
       .style("stroke-width", "2px")
       .style("opacity", 0.7);
 
-    // Add polylines between chart and labels:
+    // Compute label positions and resolve collisions
+    const labelHeight = 14;
+    const labels = data_ready.map((d) => {
+      const posA = arc.centroid(d);
+      const posB = outerArc.centroid(d);
+      const posC = outerArc.centroid(d);
+      const midangle = d.startAngle + (d.endAngle - d.startAngle) / 2;
+
+      // Determine side: right (1) or left (-1)
+      const isRight = midangle < Math.PI;
+      posC[0] = radius * 0.95 * (isRight ? 1 : -1);
+
+      return {
+        d,
+        posA,
+        posB,
+        posC,
+        isRight,
+        textAnchor: isRight ? "start" : ("end" as "start" | "end"),
+      };
+    });
+
+    // Resolve collisions (simple relaxation)
+    const resolveCollisions = (items: typeof labels) => {
+      // Sort by Y position
+      items.sort((a, b) => a.posC[1] - b.posC[1]);
+
+      let iter = 0;
+      const maxIter = 10;
+
+      while (iter < maxIter) {
+        let moved = false;
+        for (let i = 0; i < items.length - 1; i++) {
+          const a = items[i];
+          const b = items[i + 1];
+
+          const dist = b.posC[1] - a.posC[1];
+          if (dist < labelHeight) {
+            const overlap = labelHeight - dist;
+            // Move both away from each other
+            a.posC[1] -= overlap / 2;
+            b.posC[1] += overlap / 2;
+            moved = true;
+          }
+        }
+        if (!moved) break;
+        iter++;
+      }
+    };
+
+    // Process left and right sides separately
+    const rightLabels = labels.filter((l) => l.isRight);
+    const leftLabels = labels.filter((l) => !l.isRight);
+
+    resolveCollisions(rightLabels);
+    resolveCollisions(leftLabels);
+
+    // Draw Polylines
     svg
       .selectAll("allPolylines")
-      .data(data_ready)
+      .data(labels) // use processed labels
       .join("polyline")
       .attr("stroke", "black")
       .style("fill", "none")
       .attr("stroke-width", 1)
-      .attr("points", (d) => {
-        const posA = arc.centroid(d); // line insertion in the slice
-        const posB = outerArc.centroid(d); // line break: we use the other arc generator that has been built only for that
-        const posC = outerArc.centroid(d); // Label position = almost the same as posB
-        const midangle = d.startAngle + (d.endAngle - d.startAngle) / 2; // we need the angle to see if the X position will be at the extreme right or extreme left
-        posC[0] = radius * 0.95 * (midangle < Math.PI ? 1 : -1); // multiply by 1 or -1 to put it on the right or on the left
-        return [posA, posB, posC].map((p) => p.join(",")).join(" ");
+      .attr("points", (l) => {
+        return [l.posA, l.posB, l.posC].map((p) => p.join(",")).join(" ");
       });
 
-    // Add the polylines labels:
+    // Draw Label Text
     svg
       .selectAll("allLabels")
-      .data(data_ready)
+      .data(labels)
       .join("text")
-      .text((d) => d.data.category)
-      .attr("transform", (d) => {
-        const pos = outerArc.centroid(d);
-        const midangle = d.startAngle + (d.endAngle - d.startAngle) / 2;
-        pos[0] = radius * 0.99 * (midangle < Math.PI ? 1 : -1);
-        return `translate(${pos})`;
-      })
-      .style("text-anchor", (d) => {
-        const midangle = d.startAngle + (d.endAngle - d.startAngle) / 2;
-        return midangle < Math.PI ? "start" : "end";
-      })
-      .style("font-size", "12px");
+      .text((l) => l.d.data.category)
+      .attr("transform", (l) => `translate(${l.posC})`)
+      .style("text-anchor", (l) => l.textAnchor)
+      .style("font-size", "12px")
+      .attr("dx", (l) => (l.isRight ? 5 : -5)) // Add padding
+      .attr("dy", 4); // Center vertically
   }, [data]);
 
   return <svg ref={svgRef}></svg>;
