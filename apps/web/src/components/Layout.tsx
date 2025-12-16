@@ -97,7 +97,7 @@ export default function Layout() {
               to="/"
               className="text-xl tracking-tight text-slate-900 dark:text-slate-50"
             >
-              Wife Happifier
+              May Water
             </Link>
           </div>
 

@@ -35,4 +35,14 @@ export class TransactionsController {
     }
     return this.transactionsService.import(file.buffer, bankId);
   }
+
+  @Get('monthly-report')
+  getMonthlyReport() {
+    return this.transactionsService.getMonthlyReport();
+  }
+
+  @Get('category-breakdown')
+  getCategoryBreakdown(@Query('month') month: string) {
+    return this.transactionsService.getCategoryBreakdown(month);
+  }
 }
