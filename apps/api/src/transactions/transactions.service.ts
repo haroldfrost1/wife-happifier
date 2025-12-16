@@ -3,6 +3,7 @@ import { PaginatedResult } from '@wife-happifier/shared';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Transaction } from './transaction.entity';
+import { FilterRule } from './filter-rule.entity';
 import { ParserFactory } from './parsers';
 
 export interface MonthlyReportItem {
@@ -33,6 +34,8 @@ export class TransactionsService {
   constructor(
     @InjectRepository(Transaction)
     private transactionsRepository: Repository<Transaction>,
+    @InjectRepository(FilterRule)
+    private filterRulesRepository: Repository<FilterRule>,
   ) {}
 
   async findAll(
@@ -71,13 +74,51 @@ export class TransactionsService {
     return this.transactionsRepository.save(transactions);
   }
 
+  private async getFilterCondition(): Promise<string> {
+    const rules = await this.filterRulesRepository.find();
+    if (rules.length === 0) {
+      return '1=1'; // No filters
+    }
+
+    // "Exclusion" logic: exclude if match ANY rule.
+    // So valid if it does NOT match rule 1 AND does NOT match rule 2 ...
+    // WHERE (NOT (rule1) AND NOT (rule2) ...)
+
+    const conditions = rules.map((rule) => {
+      const field = `"${rule.field}"`; // quote field name for safety/reserved words
+      const value = rule.value.replace(/'/g, "''"); // minimal SQL injection protection for raw query
+
+      switch (rule.operator) {
+        case 'contains':
+          return `(${field} ILIKE '%${value}%')`;
+        case 'equals':
+          return `(${field} = '${value}')`;
+        case 'lt':
+          return `(${field} < '${value}')`;
+        case 'gt':
+          return `(${field} > '${value}')`;
+        default:
+          return 'false'; // Should not happen
+      }
+    });
+
+    // We want to EXCLUDE if any of these are true.
+    // So we include only if NONE of these are true.
+    // Equivalent to: NOT (cond1 OR cond2 OR cond3)
+    const combined = conditions.join(' OR ');
+    return `NOT (${combined})`;
+  }
+
   async getMonthlyReport(): Promise<MonthlyReportItem[]> {
+    const filterCondition = await this.getFilterCondition();
+
     const rawData = (await this.transactionsRepository.query(`
       SELECT
         TO_CHAR("date", 'YYYY-MM') as month,
         SUM(CASE WHEN amount > 0 THEN amount ELSE 0 END) as income,
         SUM(CASE WHEN amount < 0 THEN amount ELSE 0 END) as expense
       FROM transaction
+      WHERE ${filterCondition}
       GROUP BY 1
       ORDER BY 1 DESC
     `)) as MonthlyReportRaw[];
@@ -91,6 +132,8 @@ export class TransactionsService {
   }
 
   async getCategoryBreakdown(month: string): Promise<CategoryBreakdownItem[]> {
+    const filterCondition = await this.getFilterCondition();
+
     const rawData = (await this.transactionsRepository.query(
       `
       SELECT
@@ -99,6 +142,7 @@ export class TransactionsService {
       FROM transaction
       WHERE TO_CHAR("date", 'YYYY-MM') = $1
       AND amount < 0
+      AND ${filterCondition}
       GROUP BY 1
       ORDER BY 2 ASC
     `,

@@ -20,7 +20,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { LayoutDashboard, Loader2, Menu, Upload, Wallet } from "lucide-react";
+import {
+  LayoutDashboard,
+  Loader2,
+  Menu,
+  Upload,
+  Wallet,
+  Filter,
+} from "lucide-react";
 import { useRef, useState } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 
@@ -40,6 +47,11 @@ const navItems: NavItem[] = [
     title: "Transactions",
     href: "/transactions",
     icon: Wallet,
+  },
+  {
+    title: "Filter Rules",
+    href: "/filter-rules",
+    icon: Filter,
   },
 ];
 

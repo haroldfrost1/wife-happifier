@@ -4,6 +4,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TransactionsModule } from './transactions/transactions.module';
 import { Transaction } from './transactions/transaction.entity';
+import { FilterRule } from './transactions/filter-rule.entity';
 
 @Module({
   imports: [
@@ -14,7 +15,7 @@ import { Transaction } from './transactions/transaction.entity';
       username: process.env.DB_USERNAME || 'postgres',
       password: process.env.DB_PASSWORD || 'postgres',
       database: process.env.DB_NAME || 'wife-happifier',
-      entities: [Transaction],
+      entities: [Transaction, FilterRule],
       synchronize: true, // Auto-create tables for MVP dev
     }),
     TransactionsModule,
