@@ -14,7 +14,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-const API_URL = "http://localhost:3000";
+import { API_URL } from "@/config";
 
 interface MonthlyReportItem {
   month: string;

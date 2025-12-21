@@ -55,7 +55,7 @@ const navItems: NavItem[] = [
   },
 ];
 
-const API_URL = "http://localhost:3000";
+import { API_URL } from "@/config";
 
 export default function Layout() {
   const location = useLocation();

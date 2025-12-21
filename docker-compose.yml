@@ -12,5 +12,16 @@ services:
       - db-data:/var/lib/postgresql/data
     restart: always
 
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    ports:
+      - "80:80"
+    environment:
+      API_URL: "http://localhost:3000"
+    depends_on:
+      - api
+
 volumes:
   db-data:

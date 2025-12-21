@@ -15,7 +15,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { PaginatedResult, Transaction } from "@wife-happifier/shared";
 
-const API_URL = "http://localhost:3000";
+import { API_URL } from "@/config";
 
 export default function Transactions() {
   const [data, setData] = useState<PaginatedResult<Transaction> | null>(null);

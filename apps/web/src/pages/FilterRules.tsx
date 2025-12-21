@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   Table,
   TableBody,
@@ -25,7 +25,12 @@ interface FilterRule {
   value: string;
 }
 
-const API_URL = "http://localhost:3000";
+import { API_URL } from "@/config";
+
+const getFilterRules = async () => {
+  const res = await fetch(`${API_URL}/filter-rules`);
+  return res.json();
+};
 
 export default function FilterRules() {
   const [rules, setRules] = useState<FilterRule[]>([]);
@@ -35,14 +40,13 @@ export default function FilterRules() {
     value: "",
   });
 
-  const fetchRules = async () => {
-    const res = await fetch(`${API_URL}/filter-rules`);
-    const data = await res.json();
+  const fetchRules = useCallback(async () => {
+    const data = await getFilterRules();
     setRules(data);
-  };
+  }, []);
 
   useEffect(() => {
-    fetchRules();
+    getFilterRules().then(setRules);
   }, []);
 
   const handleAddRule = async () => {
