@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { join } from 'path';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -16,7 +17,9 @@ import { FilterRule } from './transactions/filter-rule.entity';
       password: process.env.DB_PASSWORD || 'postgres',
       database: process.env.DB_NAME || 'wife-happifier',
       entities: [Transaction, FilterRule],
-      synchronize: true, // Auto-create tables for MVP dev
+      synchronize: false, // Migrations are properly handled now
+      migrationsRun: true,
+      migrations: [join(__dirname, 'migrations/*.{ts,js}')],
     }),
     TransactionsModule,
   ],
