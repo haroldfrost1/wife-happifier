@@ -27,6 +27,7 @@ RUN pnpm --filter @wife-happifier/shared build
 RUN pnpm --filter api build
 
 # Deploy production deps and code to a separate folder
+RUN pnpm config set inject-workspace-packages true
 RUN pnpm deploy --filter=api --prod /prod/api
 
 # Production stage
