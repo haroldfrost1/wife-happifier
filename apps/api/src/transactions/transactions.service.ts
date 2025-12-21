@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PaginatedResult } from '@wife-happifier/shared';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, Between } from 'typeorm';
 import { Transaction } from './transaction.entity';
 import { FilterRule } from './filter-rule.entity';
 import { ParserFactory } from './parsers';
@@ -67,7 +67,50 @@ export class TransactionsService {
     const parser = ParserFactory.getParser(bankId);
     const partialTransactions = await parser.parse(fileBuffer);
 
-    const transactions = partialTransactions.map((pt) =>
+    if (partialTransactions.length === 0) {
+      return [];
+    }
+
+    const dates = partialTransactions
+      .map((t) => t.date)
+      .filter((d): d is string => !!d);
+
+    if (dates.length === 0) {
+      return [];
+    }
+
+    dates.sort();
+    const minDate = dates[0];
+    const maxDate = dates[dates.length - 1];
+
+    const existingTransactions = await this.transactionsRepository.find({
+      where: {
+        date: Between(minDate, maxDate),
+      },
+    });
+
+    const generateSignature = (t: Partial<Transaction>) => {
+      const d = t.date;
+      const amt = Number(t.amount || 0).toFixed(2);
+      const bal = Number(t.balance || 0).toFixed(2);
+      const desc = (t.description || '').trim();
+      return `${d}|${amt}|${bal}|${desc}`;
+    };
+
+    const existingSignatures = new Set(
+      existingTransactions.map(generateSignature),
+    );
+
+    const newTransactions = partialTransactions.filter((pt) => {
+      const sig = generateSignature(pt);
+      return !existingSignatures.has(sig);
+    });
+
+    if (newTransactions.length === 0) {
+      return [];
+    }
+
+    const transactions = newTransactions.map((pt) =>
       this.transactionsRepository.create(pt),
     );
 
@@ -112,7 +155,8 @@ export class TransactionsService {
   async getMonthlyReport(): Promise<MonthlyReportItem[]> {
     const filterCondition = await this.getFilterCondition();
 
-    const rawData = (await this.transactionsRepository.query(`
+    const rawData: MonthlyReportRaw[] = await this.transactionsRepository
+      .query(`
       SELECT
         TO_CHAR("date", 'YYYY-MM') as month,
         SUM(CASE WHEN amount > 0 THEN amount ELSE 0 END) as income,
@@ -121,7 +165,7 @@ export class TransactionsService {
       WHERE ${filterCondition}
       GROUP BY 1
       ORDER BY 1 DESC
-    `)) as MonthlyReportRaw[];
+    `);
 
     return rawData.map((row) => ({
       month: row.month,
@@ -134,8 +178,9 @@ export class TransactionsService {
   async getCategoryBreakdown(month: string): Promise<CategoryBreakdownItem[]> {
     const filterCondition = await this.getFilterCondition();
 
-    const rawData = (await this.transactionsRepository.query(
-      `
+    const rawData: CategoryBreakdownRaw[] =
+      await this.transactionsRepository.query(
+        `
       SELECT
         category,
         SUM(amount) as amount
@@ -146,8 +191,8 @@ export class TransactionsService {
       GROUP BY 1
       ORDER BY 2 ASC
     `,
-      [month],
-    )) as CategoryBreakdownRaw[];
+        [month],
+      );
 
     return rawData.map((row) => ({
       category: row.category || 'Uncategorized',
