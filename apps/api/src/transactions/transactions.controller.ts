@@ -45,4 +45,18 @@ export class TransactionsController {
   getCategoryBreakdown(@Query('month') month: string) {
     return this.transactionsService.getCategoryBreakdown(month);
   }
+
+  @Get('by-month')
+  @Get('by-month')
+  getTransactionsByMonth(
+    @Query('month') month: string,
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+  ) {
+    return this.transactionsService.findByMonth(
+      month,
+      Number(page),
+      Number(limit),
+    );
+  }
 }

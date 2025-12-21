@@ -58,6 +58,40 @@ export class TransactionsService {
     };
   }
 
+  async findByMonth(
+    month: string,
+    page: number = 1,
+    limit: number = 10,
+  ): Promise<PaginatedResult<Transaction>> {
+    const filterCondition = await this.getFilterCondition();
+
+    const qb = this.transactionsRepository.createQueryBuilder('transaction');
+
+    qb.where(`TO_CHAR(transaction.date, 'YYYY-MM') = :month`, { month });
+
+    if (filterCondition && filterCondition !== '1=1') {
+      qb.andWhere(filterCondition);
+    }
+
+    // Sort by absolute amount (magnitude) descending so large expenses show up top
+    qb.addSelect('ABS(transaction.amount)', 'abs_amount');
+    qb.orderBy('abs_amount', 'DESC');
+
+    qb.skip((page - 1) * limit);
+    qb.take(limit);
+
+    const [data, total] = await qb.getManyAndCount();
+
+    return {
+      data,
+      meta: {
+        total,
+        page,
+        lastPage: Math.ceil(total / limit),
+      },
+    };
+  }
+
   async create(transaction: Partial<Transaction>): Promise<Transaction> {
     const newTransaction = this.transactionsRepository.create(transaction);
     return this.transactionsRepository.save(newTransaction);

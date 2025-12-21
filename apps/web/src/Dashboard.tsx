@@ -2,7 +2,17 @@ import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { MonthlyHistoryChart } from "./components/MonthlyHistoryChart";
 import { CategoryBreakdownChart } from "./components/CategoryBreakdownChart";
-import { Loader2 } from "lucide-react";
+import { Loader2, ChevronLeft, ChevronRight } from "lucide-react";
+import { Transaction } from "@wife-happifier/shared";
+import { Button } from "@/components/ui/button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 const API_URL = "http://localhost:3000";
 
@@ -21,8 +31,11 @@ interface CategoryBreakdownItem {
 export default function Dashboard() {
   const [history, setHistory] = useState<MonthlyReportItem[]>([]);
   const [breakdown, setBreakdown] = useState<CategoryBreakdownItem[]>([]);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedMonth, setSelectedMonth] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     fetchHistory();
@@ -30,12 +43,19 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (selectedMonth) {
+      setPage(1);
       fetchBreakdown(selectedMonth);
     } else if (history.length > 0) {
       // Default to first month (latest)
       setSelectedMonth(history[0].month);
     }
   }, [history, selectedMonth]);
+
+  useEffect(() => {
+    if (selectedMonth) {
+      fetchTransactions(selectedMonth, page);
+    }
+  }, [page, selectedMonth]);
 
   const fetchHistory = async () => {
     try {
@@ -58,6 +78,20 @@ export default function Dashboard() {
       if (!res.ok) throw new Error("Failed to fetch breakdown category");
       const data = await res.json();
       setBreakdown(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const fetchTransactions = async (month: string, pageNum: number) => {
+    try {
+      const res = await fetch(
+        `${API_URL}/transactions/by-month?month=${month}&page=${pageNum}&limit=10`
+      );
+      if (!res.ok) throw new Error("Failed to fetch monthly transactions");
+      const data = await res.json();
+      setTransactions(data.data);
+      setTotalPages(data.meta.lastPage);
     } catch (error) {
       console.error(error);
     }
@@ -164,6 +198,73 @@ export default function Dashboard() {
           </CardContent>
         </Card>
       </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Top Transactions ({selectedMonth})</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Date</TableHead>
+                <TableHead>Description</TableHead>
+                <TableHead>Category</TableHead>
+                <TableHead className="text-right">Amount</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {transactions.map((t) => (
+                <TableRow key={t.id}>
+                  <TableCell>{t.date}</TableCell>
+                  <TableCell>{t.description}</TableCell>
+                  <TableCell>{t.category || "-"}</TableCell>
+                  <TableCell
+                    className={`text-right ${
+                      Number(t.amount) > 0 ? "text-green-600" : "text-red-600"
+                    }`}
+                  >
+                    {formatCurrency(Number(t.amount))}
+                  </TableCell>
+                </TableRow>
+              ))}
+              {transactions.length === 0 && (
+                <TableRow>
+                  <TableCell
+                    colSpan={4}
+                    className="text-center text-muted-foreground"
+                  >
+                    No transactions found for this month.
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+          <div className="flex items-center justify-end space-x-2 py-4">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setPage((p) => Math.max(1, p - 1))}
+              disabled={page === 1}
+            >
+              <ChevronLeft className="h-4 w-4" />
+              Previous
+            </Button>
+            <div className="text-sm text-muted-foreground">
+              Page {page} of {totalPages}
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+              disabled={page === totalPages}
+            >
+              Next
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }
