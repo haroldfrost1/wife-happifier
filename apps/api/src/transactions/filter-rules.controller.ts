@@ -17,7 +17,9 @@ export class FilterRulesController {
 
   @Post()
   create(@Body() rule: Partial<FilterRule>): Promise<FilterRule> {
-    const newRule = this.filterRulesRepository.create(rule);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { id, ...rest } = rule;
+    const newRule = this.filterRulesRepository.create(rest);
     return this.filterRulesRepository.save(newRule);
   }
 
