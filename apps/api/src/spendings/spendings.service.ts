@@ -58,14 +58,14 @@ export class SpendingsService {
             // Up API docs say filter[since] is optional. If missing, it returns all?
             // "To narrow the results to a specific date range pass one or both of filter[since] and filter[until]"
             // So omit it for first call.
-            
+
             // However, prompting specifically asked: 
             // - for the first call use the very beginning of time
             // - for the subsequent calls use the transaction date of the latest settled transaction fetched from the endpoint
-            
+
             // Wait, "use the transaction date of the latest settled transaction fetched from the endpoint"
             // So I should pass `filter[since]` with that date.
-            
+
             let url = 'https://api.up.com.au/api/v1/transactions';
             const params: any = {
                 'filter[status]': 'SETTLED',
@@ -73,7 +73,7 @@ export class SpendingsService {
             };
 
             if (latestDate) {
-                 params['filter[since]'] = latestDate.toISOString();
+                params['filter[since]'] = latestDate.toISOString();
             }
 
             // Iterate pages
@@ -81,7 +81,7 @@ export class SpendingsService {
                 console.log(`Fetching transactions from ${url} with params`, params);
                 // Note: when following 'next' link, params are usually part of the link, so we shouldn't pass them again if we are using the full URL from 'next'.
                 // But for the FIRST call we pass params.
-                
+
                 const response = await firstValueFrom(
                     this.httpService.get(url, {
                         headers: { Authorization: `Bearer ${process.env.UP_BANK_TOKEN}` },
@@ -93,13 +93,13 @@ export class SpendingsService {
                 const transactions = data;
 
                 if (transactions.length > 0) {
-                     await this.persistTransactions(transactions);
+                    await this.persistTransactions(transactions);
                 }
 
                 url = links.next;
                 // If url is next, we reset params because they are encoded in the next link
-                if(url) {
-                    for(const key in params) delete params[key]; 
+                if (url) {
+                    for (const key in params) delete params[key];
                 }
             }
             console.log('Up Bank transaction sync completed.');
@@ -112,7 +112,7 @@ export class SpendingsService {
     private async persistTransactions(transactions: any[]) {
         for (const t of transactions) {
             const externalId = t.id;
-             // Deduplication check
+            // Deduplication check
             const exists = await this.spendingsRepository.findOne({ where: { externalId } });
             if (exists) {
                 continue;
@@ -124,9 +124,9 @@ export class SpendingsService {
             // "Spending" implies expenses.
             // But transaction entity had `amount` where income > 0 and expense < 0.
             // Let's keep the raw value.
-            
+
             const categoryId = t.relationships.category?.data?.id || null;
-            
+
             // Spending entity needs: date, description, amount, category, externalId
             const newSpending = this.spendingsRepository.create({
                 date: t.attributes.createdAt, // or settledAt if available/preferred. Prompt said "transaction date". created_at is standard.
