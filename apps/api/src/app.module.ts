@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ScheduleModule } from '@nestjs/schedule';
 import { join } from 'path';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
@@ -6,6 +7,8 @@ import { AppService } from './app.service';
 import { TransactionsModule } from './transactions/transactions.module';
 import { Transaction } from './transactions/transaction.entity';
 import { FilterRule } from './transactions/filter-rule.entity';
+import { SpendingsModule } from './spendings/spendings.module';
+import { Spending } from './spendings/spending.entity';
 
 @Module({
   imports: [
@@ -16,14 +19,16 @@ import { FilterRule } from './transactions/filter-rule.entity';
       username: process.env.DB_USERNAME || 'postgres',
       password: process.env.DB_PASSWORD || 'postgres',
       database: process.env.DB_NAME || 'wife-happifier',
-      entities: [Transaction, FilterRule],
+      entities: [Transaction, FilterRule, Spending],
       synchronize: false, // Migrations are properly handled now
       migrationsRun: true,
       migrations: [join(__dirname, 'migrations/*.{ts,js}')],
     }),
     TransactionsModule,
+    SpendingsModule,
+    ScheduleModule.forRoot(),
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }

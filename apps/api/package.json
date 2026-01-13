@@ -25,11 +25,15 @@
     "db:clear": "TS_NODE_PROJECT=tsconfig.migration.json ts-node -r tsconfig-paths/register src/scripts/clear-db.ts"
   },
   "dependencies": {
+    "@nestjs/axios": "^4.0.1",
     "@nestjs/common": "^11.0.1",
     "@nestjs/core": "^11.0.1",
     "@nestjs/platform-express": "^11.0.1",
+    "@nestjs/schedule": "^6.1.0",
     "@nestjs/typeorm": "^11.0.0",
+    "@types/cron": "^2.4.3",
     "@wife-happifier/shared": "workspace:*",
+    "axios": "^1.13.2",
     "csv-parse": "^6.1.0",
     "pg": "^8.16.3",
     "reflect-metadata": "^0.2.2",
