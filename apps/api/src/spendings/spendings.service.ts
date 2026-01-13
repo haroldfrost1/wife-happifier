@@ -47,7 +47,7 @@ export class SpendingsService {
         return result ? new Date(result.date) : null;
     }
 
-    @Cron('*/5 * * * *')
+    @Cron('0 0 * * *')
     async syncUpBankTransactions() {
         console.log('Starting Up Bank transaction sync...');
         try {
