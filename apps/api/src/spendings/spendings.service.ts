@@ -51,9 +51,9 @@ export class SpendingsService {
     return result ? new Date(result.date) : null;
   }
 
-  @Cron('0 0 * * *')
   async syncUpBankTransactions() {
     console.log('Starting Up Bank transaction sync...');
+    console.log('Cron schedule set to every 5 minutes');
     try {
       const latestDate = await this.findLatestTransactionDate();
       // If no latest date, default to a sensible past, e.g., 2024-01-01 or just don't pass filter[since] if API supports full history pagination (Up API does).
@@ -120,30 +120,26 @@ export class SpendingsService {
         where: { externalId },
       });
       if (exists) {
+        console.log(`Skipping duplicate transaction ${externalId}`);
         continue;
       }
 
       const amountVal = parseFloat(t.attributes.amount.value);
-      // Up Bank: positive is credit, negative is debit.
-      // Spending entity: typically positive for spending?
-      // "Spending" implies expenses.
-      // But transaction entity had `amount` where income > 0 and expense < 0.
-      // Let's keep the raw value.
-
       const categoryId = t.relationships.category?.data?.id || null;
 
-      // Spending entity needs: date, description, amount, category, externalId
       const newSpending = this.spendingsRepository.create({
-        date: t.attributes.createdAt, // or settledAt if available/preferred. Prompt said "transaction date". created_at is standard.
-        description: t.attributes.description, // or rawText?
+        date: t.attributes.createdAt,
+        description: t.attributes.description,
         amount: amountVal,
         category: categoryId,
         externalId: externalId,
       });
       await this.spendingsRepository.save(newSpending);
+      console.log(`Saved spending for transaction ${externalId}`);
 
       await this.syncTransactionToNotion(t, amountVal);
     }
+    console.log('All transactions persisted for current sync cycle');
   }
 
   public async syncTransactionToNotion(t: any, amountVal: number) {
