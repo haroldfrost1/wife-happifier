@@ -1,11 +1,18 @@
 {
   "name": "@wife-happifier/shared",
   "version": "1.0.0",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/esm/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
+    }
+  },
   "scripts": {
-    "build": "tsc",
-    "dev": "tsc -w"
+    "build": "tsc -b tsconfig.json tsconfig.cjs.json",
+    "dev": "tsc -b tsconfig.json tsconfig.cjs.json -w"
   },
   "devDependencies": {
     "typescript": "^5.0.0"
