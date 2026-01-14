@@ -6,6 +6,8 @@ import { PaginatedResult } from '@wife-happifier/shared';
 import { Cron } from '@nestjs/schedule';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
+import { NotionService } from '../notion/notion.service';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class SpendingsService {
@@ -13,6 +15,8 @@ export class SpendingsService {
         @InjectRepository(Spending)
         private spendingsRepository: Repository<Spending>,
         private httpService: HttpService,
+        private readonly notionService: NotionService,
+        private readonly configService: ConfigService,
     ) { }
 
     async findAll(
@@ -136,7 +140,59 @@ export class SpendingsService {
                 externalId: externalId
             });
             await this.spendingsRepository.save(newSpending);
+
+            await this.syncTransactionToNotion(t, amountVal);
         }
+    }
+
+    public async syncTransactionToNotion(t: any, amountVal: number) {
+        try {
+            const databaseId = this.configService.get<string>('NOTION_DATABASE_ID');
+            if (databaseId) {
+                await this.notionService.client.pages.create({
+                    parent: {
+                        database_id: databaseId,
+                    },
+                    properties: {
+                        "Description": {
+                            title: [
+                                {
+                                    text: {
+                                        content: t.attributes.description || "No Description",
+                                    },
+                                },
+                            ],
+                        },
+                        "Amount": {
+                            number: amountVal,
+                        },
+                        "Transaction Date": {
+                            date: {
+                                start: t.attributes.createdAt, // Using createdAt as transaction date
+                            },
+                        },
+                        "Category": {
+                            rich_text: [
+                                {
+                                    text: {
+                                        content: await this.getCategoryName(t.relationships.category?.data?.id),
+                                    },
+                                },
+                            ],
+                        },
+                    },
+                });
+            }
+        } catch (error) {
+            console.error(`Failed to sync transaction ${t.id} to Notion:`, error);
+        }
+    }
+
+    private async getCategoryName(categoryId: string | null): Promise<string> {
+        // Ideally we would fetch the category name from Up API or a local map.
+        // For now, let's return the ID or "Uncategorized".
+        // If the prompt implied "Test" as a placeholder, I'll use the ID for better data or "Uncategorized".
+        return categoryId || 'Uncategorized';
     }
     async getMTDSpending(): Promise<number> {
         const now = new Date();
