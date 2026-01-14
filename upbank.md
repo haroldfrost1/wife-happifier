@@ -8,7 +8,7 @@ An illustration of how a specific endpoint, such as `GET /accounts`, is combined
 https://api.up.com.au/api/v1/accounts
 ```
 
---------------------------------
+---
 
 ### Sample Request: List Webhook Logs
 
@@ -23,7 +23,7 @@ curl https://api.up.com.au/api/v1/webhooks/1bcf7477-a232-4bd7-ba38-80673cca9910/
 -d 'page[size]=1'
 ```
 
---------------------------------
+---
 
 ### Retrieve Webhooks List using cURL
 
@@ -38,7 +38,7 @@ curl https://api.up.com.au/api/v1/webhooks \
 -d 'page[size]=1'
 ```
 
---------------------------------
+---
 
 ### Sample Response: List Webhook Logs
 
@@ -48,39 +48,39 @@ A JSON example of the response received when listing webhook delivery logs. It i
 
 ```json
 {
-"data": [
-{
-"type": "webhook-delivery-logs",
-"id": "8e95a0f0-3d4c-4294-9c44-563b745662f1",
-"attributes": {
-"request": {
-"body": "{\"data\":{\"type\":\"webhook-events\",\"id\":\"26fa6493-b4fe-4d6f-baa6-7bd72db1e8fc\",\"attributes\":{\"eventType\":\"TRANSACTION_CREATED\",\"createdAt\":\"2025-06-03T00:22:51+10:00\"},\"relationships\":{\"webhook\":{\"data\":{\"type\":\"webhooks\",\"id\":\"1bcf7477-a232-4bd7-ba38-80673cca9910\"},\"links\":{\"related\":\"https://api.up.com.au/api/v1/webhooks/1bcf7477-a232-4bd7-ba38-80673cca9910\"}},\"transaction\":{\"data\":{\"type\":\"transactions\",\"id\":\"ba763685-fd3d-4307-bf7a-1a0da2c5f3a7\"},\"links\":{\"related\":\"https://api.up.com.au/api/v1/transactions/ba763685-fd3d-4307-bf7a-1a0da2c5f3a7\"}}}}}}"
-},
-"response": {
-"statusCode": 200,
-"body": "{\"ok\":true}"
-},
-"deliveryStatus": "DELIVERED",
-"createdAt": "2025-06-03T00:22:51+10:00"
-},
-"relationships": {
-"webhookEvent": {
-"data": {
-"type": "webhook-events",
-"id": "26fa6493-b4fe-4d6f-baa6-7bd72db1e8fc"
-}
-}
-}
-}
-],
-"links": {
-"prev": null,
-"next": "https://api.up.com.au/api/v1/webhooks/1bcf7477-a232-4bd7-ba38-80673cca9910/logs?page%5Bafter%5D=WyIyMDI1LTA2LTAyVDE0OjIyOjUxLjI1MzU5ODAwMFoiLCI4ZTk1YTBmMC0zZDRjLTQyOTQtOWM0NC01NjNiNzQ1NjYyZjEiXQ%3D%3D&page%5Bsize%5D=1"
-}
+  "data": [
+    {
+      "type": "webhook-delivery-logs",
+      "id": "8e95a0f0-3d4c-4294-9c44-563b745662f1",
+      "attributes": {
+        "request": {
+          "body": "{\"data\":{\"type\":\"webhook-events\",\"id\":\"26fa6493-b4fe-4d6f-baa6-7bd72db1e8fc\",\"attributes\":{\"eventType\":\"TRANSACTION_CREATED\",\"createdAt\":\"2025-06-03T00:22:51+10:00\"},\"relationships\":{\"webhook\":{\"data\":{\"type\":\"webhooks\",\"id\":\"1bcf7477-a232-4bd7-ba38-80673cca9910\"},\"links\":{\"related\":\"https://api.up.com.au/api/v1/webhooks/1bcf7477-a232-4bd7-ba38-80673cca9910\"}},\"transaction\":{\"data\":{\"type\":\"transactions\",\"id\":\"ba763685-fd3d-4307-bf7a-1a0da2c5f3a7\"},\"links\":{\"related\":\"https://api.up.com.au/api/v1/transactions/ba763685-fd3d-4307-bf7a-1a0da2c5f3a7\"}}}}}}"
+        },
+        "response": {
+          "statusCode": 200,
+          "body": "{\"ok\":true}"
+        },
+        "deliveryStatus": "DELIVERED",
+        "createdAt": "2025-06-03T00:22:51+10:00"
+      },
+      "relationships": {
+        "webhookEvent": {
+          "data": {
+            "type": "webhook-events",
+            "id": "26fa6493-b4fe-4d6f-baa6-7bd72db1e8fc"
+          }
+        }
+      }
+    }
+  ],
+  "links": {
+    "prev": null,
+    "next": "https://api.up.com.au/api/v1/webhooks/1bcf7477-a232-4bd7-ba38-80673cca9910/logs?page%5Bafter%5D=WyIyMDI1LTA2LTAyVDE0OjIyOjUxLjI1MzU5ODAwMFoiLCI4ZTk1YTBmMC0zZDRjLTQyOTQtOWM0NC01NjNiNzQ1NjYyZjEiXQ%3D%3D&page%5Bsize%5D=1"
+  }
 }
 ```
 
---------------------------------
+---
 
 ### List Accounts: Sample Request (cURL)
 
@@ -95,7 +95,7 @@ curl https://api.up.com.au/api/v1/accounts \
 -d 'page[size]=1'
 ```
 
---------------------------------
+---
 
 ### Example URL for Specifying Pagination Page Size
 
@@ -107,7 +107,7 @@ Demonstrates how to use the `page[size]` query parameter to control the number o
 https://api.up.com.au/api/v1/accounts?page[size]=10
 ```
 
---------------------------------
+---
 
 ### Sample JSON Response: List Categories
 
@@ -117,66 +117,66 @@ An example of the JSON structure returned by the /categories endpoint, showing m
 
 ```json
 {
-"data": [
-{
-"type": "categories",
-"id": "hobbies",
-"attributes": {
-"name": "Hobbies"
-},
-"relationships": {
-"parent": {
-"data": {
-"type": "categories",
-"id": "good-life"
-},
-"links": {
-"related": "https://api.up.com.au/api/v1/categories/good-life"
-}
-},
-"children": {
-"data": [],
-"links": {
-"related": "https://api.up.com.au/api/v1/categories?filter%5Bparent%5D=hobbies"
-}
-}
-},
-"links": {
-"self": "https://api.up.com.au/api/v1/categories/hobbies"
-}
-},
-{
-"type": "categories",
-"id": "restaurants-and-cafes",
-"attributes": {
-"name": "Restaurants & Cafes"
-},
-"relationships": {
-"parent": {
-"data": {
-"type": "categories",
-"id": "good-life"
-},
-"links": {
-"related": "https://api.up.com.au/api/v1/categories/good-life"
-}
-},
-"children": {
-"data": [],
-"links": {
-"related": "https://api.up.com.au/api/v1/categories?filter%5Bparent%5D=restaurants-and-cafes"
-}
-}
-},
-"links": {
-"self": "https://api.up.com.au/api/v1/categories/restaurants-and-cafes"
-}
-}
-]
+  "data": [
+    {
+      "type": "categories",
+      "id": "hobbies",
+      "attributes": {
+        "name": "Hobbies"
+      },
+      "relationships": {
+        "parent": {
+          "data": {
+            "type": "categories",
+            "id": "good-life"
+          },
+          "links": {
+            "related": "https://api.up.com.au/api/v1/categories/good-life"
+          }
+        },
+        "children": {
+          "data": [],
+          "links": {
+            "related": "https://api.up.com.au/api/v1/categories?filter%5Bparent%5D=hobbies"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.up.com.au/api/v1/categories/hobbies"
+      }
+    },
+    {
+      "type": "categories",
+      "id": "restaurants-and-cafes",
+      "attributes": {
+        "name": "Restaurants & Cafes"
+      },
+      "relationships": {
+        "parent": {
+          "data": {
+            "type": "categories",
+            "id": "good-life"
+          },
+          "links": {
+            "related": "https://api.up.com.au/api/v1/categories/good-life"
+          }
+        },
+        "children": {
+          "data": [],
+          "links": {
+            "related": "https://api.up.com.au/api/v1/categories?filter%5Bparent%5D=restaurants-and-cafes"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.up.com.au/api/v1/categories/restaurants-and-cafes"
+      }
+    }
+  ]
 }
 ```
 
---------------------------------
+---
 
 ### Sample Webhook Creation Response
 
@@ -186,30 +186,30 @@ Example JSON response received after successfully creating a webhook, including 
 
 ```json
 {
-"data": {
-"type": "webhooks",
-"id": "eee8034c-9599-409c-8dd5-b04a75bddf23",
-"attributes": {
-"url": "http://example.com/webhook",
-"description": "Example webhook",
-"secretKey": "oC8HhYUjSm3fapyXde1Rjo78X9Mhl6gqnEg6q5BD40L2o3bx9iKTZoks1LgoV0oD",
-"createdAt": "2025-06-04T00:21:49+10:00"
-},
-"relationships": {
-"logs": {
-"links": {
-"related": "https://api.up.com.au/api/v1/webhooks/eee8034c-9599-409c-8dd5-b04a75bddf23/logs"
-}
-}
-},
-"links": {
-"self": "https://api.up.com.au/api/v1/webhooks/eee8034c-9599-409c-8dd5-b04a75bddf23"
-}
-}
+  "data": {
+    "type": "webhooks",
+    "id": "eee8034c-9599-409c-8dd5-b04a75bddf23",
+    "attributes": {
+      "url": "http://example.com/webhook",
+      "description": "Example webhook",
+      "secretKey": "oC8HhYUjSm3fapyXde1Rjo78X9Mhl6gqnEg6q5BD40L2o3bx9iKTZoks1LgoV0oD",
+      "createdAt": "2025-06-04T00:21:49+10:00"
+    },
+    "relationships": {
+      "logs": {
+        "links": {
+          "related": "https://api.up.com.au/api/v1/webhooks/eee8034c-9599-409c-8dd5-b04a75bddf23/logs"
+        }
+      }
+    },
+    "links": {
+      "self": "https://api.up.com.au/api/v1/webhooks/eee8034c-9599-409c-8dd5-b04a75bddf23"
+    }
+  }
 }
 ```
 
---------------------------------
+---
 
 ### List All Attachments API Request and Response
 
@@ -224,62 +224,62 @@ curl https://api.up.com.au/api/v1/attachments \
 
 ```json
 {
-"data": [
-{
-"type": "attachments",
-"id": "e8513ab4-64b8-4180-a7f6-817ed7e8ad75",
-"attributes": {
-"createdAt": "2025-06-04T00:21:29+10:00",
-"fileURL": "http://localhost:8080/asset/customer_transaction_attachment.jpg?filename=uploads%2Fcustomer_transaction_attachments%2Fmodels%2Fattachment%2Ffile%2F7%2Fattachment.jpg&timestamp=1748960490&token=bbc1441debfcca93a4fb39908a1526c30703b8d03b458fcab88e55ab52cf3236",
-"fileURLExpiresAt": "2025-06-04T00:36:30+10:00",
-"fileExtension": "jpg",
-"fileContentType": "image/jpeg"
-},
-"relationships": {
-"transaction": {
-"data": {
-"type": "transactions",
-"id": "a236b4eb-7e38-4669-810e-439ba7f084fd"
-},
-"links": {
-"related": "https://api.up.com.au/api/v1/transactions/a236b4eb-7e38-4669-810e-439ba7f084fd"
-}
-}
-},
-"links": {
-"self": "https://api.up.com.au/api/v1/attachments/e8513ab4-64b8-4180-a7f6-817ed7e8ad75"
-}
-},
-{
-"type": "attachments",
-"id": "fbb02d5c-28d3-4807-8438-a624a6feb632",
-"attributes": {
-"createdAt": "2025-06-04T00:21:30+10:00",
-"fileURL": "http://localhost:8080/asset/customer_transaction_attachment.jpg?filename=uploads%2Fcustomer_transaction_attachments%2Fmodels%2Fattachment%2Ffile%2F8%2Fattachment.jpg&timestamp=1748960490&token=32bcc4a6a0138f2fc49d6197b94b57620053de4afac36c856950264c16962bfa",
-"fileURLExpiresAt": "2025-06-04T00:36:30+10:00",
-"fileExtension": "jpg",
-"fileContentType": "image/jpeg"
-},
-"relationships": {
-"transaction": {
-"data": {
-"type": "transactions",
-"id": "75a9b682-0376-43da-90ac-12b99cf5224e"
-},
-"links": {
-"related": "https://api.up.com.au/api/v1/transactions/75a9b682-0376-43da-90ac-12b99cf5224e"
-}
-}
-},
-"links": {
-"self": "https://api.up.com.au/api/v1/attachments/fbb02d5c-28d3-4807-8438-a624a6feb632"
-}
-}
-],
-"links": {
-"prev": null,
-"next": null
-}
+  "data": [
+    {
+      "type": "attachments",
+      "id": "e8513ab4-64b8-4180-a7f6-817ed7e8ad75",
+      "attributes": {
+        "createdAt": "2025-06-04T00:21:29+10:00",
+        "fileURL": "http://localhost:8080/asset/customer_transaction_attachment.jpg?filename=uploads%2Fcustomer_transaction_attachments%2Fmodels%2Fattachment%2Ffile%2F7%2Fattachment.jpg&timestamp=1748960490&token=bbc1441debfcca93a4fb39908a1526c30703b8d03b458fcab88e55ab52cf3236",
+        "fileURLExpiresAt": "2025-06-04T00:36:30+10:00",
+        "fileExtension": "jpg",
+        "fileContentType": "image/jpeg"
+      },
+      "relationships": {
+        "transaction": {
+          "data": {
+            "type": "transactions",
+            "id": "a236b4eb-7e38-4669-810e-439ba7f084fd"
+          },
+          "links": {
+            "related": "https://api.up.com.au/api/v1/transactions/a236b4eb-7e38-4669-810e-439ba7f084fd"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.up.com.au/api/v1/attachments/e8513ab4-64b8-4180-a7f6-817ed7e8ad75"
+      }
+    },
+    {
+      "type": "attachments",
+      "id": "fbb02d5c-28d3-4807-8438-a624a6feb632",
+      "attributes": {
+        "createdAt": "2025-06-04T00:21:30+10:00",
+        "fileURL": "http://localhost:8080/asset/customer_transaction_attachment.jpg?filename=uploads%2Fcustomer_transaction_attachments%2Fmodels%2Fattachment%2Ffile%2F8%2Fattachment.jpg&timestamp=1748960490&token=32bcc4a6a0138f2fc49d6197b94b57620053de4afac36c856950264c16962bfa",
+        "fileURLExpiresAt": "2025-06-04T00:36:30+10:00",
+        "fileExtension": "jpg",
+        "fileContentType": "image/jpeg"
+      },
+      "relationships": {
+        "transaction": {
+          "data": {
+            "type": "transactions",
+            "id": "75a9b682-0376-43da-90ac-12b99cf5224e"
+          },
+          "links": {
+            "related": "https://api.up.com.au/api/v1/transactions/75a9b682-0376-43da-90ac-12b99cf5224e"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.up.com.au/api/v1/attachments/fbb02d5c-28d3-4807-8438-a624a6feb632"
+      }
+    }
+  ],
+  "links": {
+    "prev": null,
+    "next": null
+  }
 }
 ```
 
@@ -289,7 +289,7 @@ Pagination Links:
   next: string (nullable) - The link to the next page in the results. If this value is null there is no next page.
 ```
 
---------------------------------
+---
 
 ### API Reference: List Transactions by Account
 
@@ -367,7 +367,7 @@ GET /accounts/{accountId}/transactions
         Description: The canonical link to this resource within the API.
 ```
 
---------------------------------
+---
 
 ### List Accounts: Sample Response (JSON)
 
@@ -377,41 +377,41 @@ An example JSON response for listing accounts, showing the structure of account 
 
 ```json
 {
-"data": [
-{
-"type": "accounts",
-"id": "6d48510d-a8a7-4477-8b61-7a6372cf6e5a",
-"attributes": {
-"displayName": "Spending",
-"accountType": "TRANSACTIONAL",
-"ownershipType": "INDIVIDUAL",
-"balance": {
-"currencyCode": "AUD",
-"value": "1.00",
-"valueInBaseUnits": 100
-},
-"createdAt": "2025-06-04T00:21:27+10:00"
-},
-"relationships": {
-"transactions": {
-"links": {
-"related": "https://api.up.com.au/api/v1/accounts/6d48510d-a8a7-4477-8b61-7a6372cf6e5a/transactions"
-}
-}
-},
-"links": {
-"self": "https://api.up.com.au/api/v1/accounts/6d48510d-a8a7-4477-8b61-7a6372cf6e5a"
-}
-}
-],
-"links": {
-"prev": null,
-"next": "https://api.up.com.au/api/v1/accounts?page%5Bafter%5D=WyIyMDI1LTA2LTAzVDE0OjIxOjI3Ljc4MjQ1OTAwMFoiLCI2ZDQ4NTEwZC1hOGE3LTQ0NzctOGI2MS03YTYzNzJjZjZlNWEiXQ%3D%3D&page%5Bsize%5D=1"
-}
+  "data": [
+    {
+      "type": "accounts",
+      "id": "6d48510d-a8a7-4477-8b61-7a6372cf6e5a",
+      "attributes": {
+        "displayName": "Spending",
+        "accountType": "TRANSACTIONAL",
+        "ownershipType": "INDIVIDUAL",
+        "balance": {
+          "currencyCode": "AUD",
+          "value": "1.00",
+          "valueInBaseUnits": 100
+        },
+        "createdAt": "2025-06-04T00:21:27+10:00"
+      },
+      "relationships": {
+        "transactions": {
+          "links": {
+            "related": "https://api.up.com.au/api/v1/accounts/6d48510d-a8a7-4477-8b61-7a6372cf6e5a/transactions"
+          }
+        }
+      },
+      "links": {
+        "self": "https://api.up.com.au/api/v1/accounts/6d48510d-a8a7-4477-8b61-7a6372cf6e5a"
+      }
+    }
+  ],
+  "links": {
+    "prev": null,
+    "next": "https://api.up.com.au/api/v1/accounts?page%5Bafter%5D=WyIyMDI1LTA2LTAzVDE0OjIxOjI3Ljc4MjQ1OTAwMFoiLCI2ZDQ4NTEwZC1hOGE3LTQ0NzctOGI2MS03YTYzNzJjZjZlNWEiXQ%3D%3D&page%5Bsize%5D=1"
+  }
 }
 ```
 
---------------------------------
+---
 
 ### Create Webhook using cURL
 
@@ -426,7 +426,7 @@ curl https://api.up.com.au/api/v1/webhooks \
 -H 'Content-Type: application/json' \
 ```
 
---------------------------------
+---
 
 ### Sample Response for Retrieve Webhook
 
@@ -436,29 +436,29 @@ Example JSON response for a successful webhook retrieval, showing the webhook's 
 
 ```json
 {
-"data": {
-"type": "webhooks",
-"id": "d5878264-b56e-4780-8cd2-d944cea35753",
-"attributes": {
-"url": "http://example.com/webhook-2",
-"description": "Webhook number 2",
-"createdAt": "2025-06-03T00:21:49+10:00"
-},
-"relationships": {
-"logs": {
-"links": {
-"related": "https://api.up.com.au/api/v1/webhooks/d5878264-b56e-4780-8cd2-d944cea35753/logs"
-}
-}
-},
-"links": {
-"self": "https://api.up.com.au/api/v1/webhooks/d5878264-b56e-4780-8cd2-d944cea35753"
-}
-}
+  "data": {
+    "type": "webhooks",
+    "id": "d5878264-b56e-4780-8cd2-d944cea35753",
+    "attributes": {
+      "url": "http://example.com/webhook-2",
+      "description": "Webhook number 2",
+      "createdAt": "2025-06-03T00:21:49+10:00"
+    },
+    "relationships": {
+      "logs": {
+        "links": {
+          "related": "https://api.up.com.au/api/v1/webhooks/d5878264-b56e-4780-8cd2-d944cea35753/logs"
+        }
+      }
+    },
+    "links": {
+      "self": "https://api.up.com.au/api/v1/webhooks/d5878264-b56e-4780-8cd2-d944cea35753"
+    }
+  }
 }
 ```
 
---------------------------------
+---
 
 ### Retrieve Webhook API Endpoint Documentation
 
@@ -522,7 +522,7 @@ data
       The canonical link to this resource within the API.
 ```
 
---------------------------------
+---
 
 ### Retrieve Webhook Sample Request (curl)
 
@@ -535,7 +535,7 @@ curl https://api.up.com.au/api/v1/webhooks/d5878264-b56e-4780-8cd2-d944cea35753 
 -H 'Authorization: Bearer up:demo:im1zzg8QGGeutjHM'
 ```
 
---------------------------------
+---
 
 ### Sample JSON Response for Ping Endpoint
 
@@ -552,7 +552,7 @@ An example of the JSON response returned by the `/util/ping` endpoint upon succe
 }
 ```
 
---------------------------------
+---
 
 ### Create Webhook Request Payload Example
 
@@ -562,16 +562,16 @@ Example JSON payload for creating a new webhook, specifying the URL and an optio
 
 ```json
 {
-"data": {
-"attributes": {
-"url": "http://example.com/webhook",
-"description": "Example webhook"
-}
-}
+  "data": {
+    "attributes": {
+      "url": "http://example.com/webhook",
+      "description": "Example webhook"
+    }
+  }
 }
 ```
 
---------------------------------
+---
 
 ### API Documentation: Retrieve Account Endpoint
 
@@ -622,7 +622,7 @@ Returns:
           Description: The canonical link to this resource within the API.
 ```
 
---------------------------------
+---
 
 ### List Categories API Endpoint Definition
 
@@ -635,7 +635,7 @@ GET /categories
   Description: Retrieve all pre-defined categories in the Up system.
 ```
 
---------------------------------
+---
 
 ### API Documentation: List Attachments Endpoint
 
@@ -679,7 +679,7 @@ Returns:
           Description: The canonical link to this resource within the API.
 ```
 
---------------------------------
+---
 
 ### Up Banking API HTTP Status Codes Reference
 
@@ -696,7 +696,7 @@ A reference guide to the HTTP status codes used by the Up Banking API to convey 
 404:
 ```
 
---------------------------------
+---
 
 ### Webhook Ping Response Example
 
@@ -706,29 +706,29 @@ Illustrates the expected JSON response structure after successfully pinging a we
 
 ```json
 {
-"data": {
-"type": "webhook-events",
-"id": "9d0a5fee-f6c7-4689-95ba-eaf03d150912",
-"attributes": {
-"eventType": "PING",
-"createdAt": "2025-06-04T00:21:50+10:00"
-},
-"relationships": {
-"webhook": {
-"data": {
-"type": "webhooks",
-"id": "c4dffdac-5e23-47a1-869b-2c431059a9cf"
-},
-"links": {
-"related": "https://api.up.com.au/api/v1/webhooks/c4dffdac-5e23-47a1-869b-2c431059a9cf"
-}
-}
-}
-}
+  "data": {
+    "type": "webhook-events",
+    "id": "9d0a5fee-f6c7-4689-95ba-eaf03d150912",
+    "attributes": {
+      "eventType": "PING",
+      "createdAt": "2025-06-04T00:21:50+10:00"
+    },
+    "relationships": {
+      "webhook": {
+        "data": {
+          "type": "webhooks",
+          "id": "c4dffdac-5e23-47a1-869b-2c431059a9cf"
+        },
+        "links": {
+          "related": "https://api.up.com.au/api/v1/webhooks/c4dffdac-5e23-47a1-869b-2c431059a9cf"
+        }
+      }
+    }
+  }
 }
 ```
 
---------------------------------
+---
 
 ### Up Personal Finance API Beta Overview and Access
 
@@ -756,7 +756,7 @@ Prerequisites:
 Future Development: Expansion to allow third-party applications and integrations.
 ```
 
---------------------------------
+---
 
 ### Retrieve Paginated List of Accounts API Endpoint
 
@@ -830,7 +830,7 @@ MoneyObject:
     Example: 1056
 ```
 
---------------------------------
+---
 
 ### Up API Transaction Resource Sample JSON
 
@@ -972,7 +972,7 @@ An example JSON structure representing a transaction resource from the Up API, i
 }
 ```
 
---------------------------------
+---
 
 ### Sample JSON Response: Retrieve a Single Category
 
@@ -982,36 +982,36 @@ An example of the JSON response for retrieving a single category, showing its ty
 
 ```json
 {
-"data": {
-"type": "categories",
-"id": "home",
-"attributes": {
-"name": "Home"
-},
-"relationships": {
-"parent": {
-"data": null
-},
-"children": {
-"data": [
-{
-"type": "categories",
-"id": "groceries"
-}
-],
-"links": {
-"related": "https://api.up.com.au/api/v1/categories?filter%5Bparent%5D=home"
-}
-}
-},
-"links": {
-"self": "https://api.up.com.au/api/v1/categories/home"
-}
-}
+  "data": {
+    "type": "categories",
+    "id": "home",
+    "attributes": {
+      "name": "Home"
+    },
+    "relationships": {
+      "parent": {
+        "data": null
+      },
+      "children": {
+        "data": [
+          {
+            "type": "categories",
+            "id": "groceries"
+          }
+        ],
+        "links": {
+          "related": "https://api.up.com.au/api/v1/categories?filter%5Bparent%5D=home"
+        }
+      }
+    },
+    "links": {
+      "self": "https://api.up.com.au/api/v1/categories/home"
+    }
+  }
 }
 ```
 
---------------------------------
+---
 
 ### List All Tags
 
@@ -1086,7 +1086,7 @@ curl https://api.up.com.au/api/v1/tags \
 }
 ```
 
---------------------------------
+---
 
 ### Example API Error Response Payload
 
@@ -1107,7 +1107,7 @@ A sample JSON payload demonstrating the structure of a typical API error respons
 }
 ```
 
---------------------------------
+---
 
 ### Example Transaction Resource Response (JSON)
 
@@ -1117,95 +1117,95 @@ Illustrates the detailed JSON structure returned by the Up Bank API for a single
 
 ```json
 {
-"data": {
-"type": "transactions",
-"id": "6035d589-42a1-44b0-9007-754119a5d04a",
-"attributes": {
-"status": "SETTLED",
-"rawText": "WARUNG BEBEK, UBUD INDONES",
-"description": "Warung Bebek Bengil",
-"message": null,
-"isCategorizable": true,
-"holdInfo": {
-"amount": {
-"currencyCode": "AUD",
-"value": "-107.92",
-"valueInBaseUnits": -10792
-},
-"foreignAmount": null
-},
-"roundUp": {
-"amount": {
-"currencyCode": "AUD",
-"value": "-0.08",
-"valueInBaseUnits": -8
-},
-"boostPortion": null
-},
-"cashback": null,
-"amount": {
-"currencyCode": "AUD",
-"value": "-107.92",
-"valueInBaseUnits": -10792
-},
-"foreignAmount": {
-"currencyCode": "IDR",
-"value": "-1053698.77",
-"valueInBaseUnits": -105369877
-},
-"cardPurchaseMethod": {
-"method": "CARD_ON_FILE",
-"cardNumberSuffix": "0001"
-},
-"settledAt": "2025-05-31T04:00:00+10:00",
-"createdAt": "2025-05-31T04:00:00+10:00",
-"transactionType": null,
-"note": null,
-"performingCustomer": {
-"displayName": "Bobby"
-},
-"deepLinkURL": "up://transaction/VHJhbnNhY3Rpb24tMTE2"
-},
-"relationships": {
-"account": {
-"data": {
-"type": "accounts",
-"id": "00cc7754-c332-48e5-894e-05250d3dbc6c"
-},
-"links": {
-"related": "https://api.up.com.au/api/v1/accounts/00cc7754-c332-48e5-894e-05250d3dbc6c"
-}
-},
-"transferAccount": {
-"data": null
-},
-"category": {
-"data": null,
-"links": {
-"self": "https://api.up.com.au/api/v1/transactions/6035d589-42a1-44b0-9007-754119a5d04a/relationships/category"
-}
-},
-"parentCategory": {
-"data": null
-},
-"tags": {
-"data": [],
-"links": {
-"self": "https://api.up.com.au/api/v1/transactions/6035d589-42a1-44b0-9007-754119a5d04a/relationships/tags"
-}
-},
-"attachment": {
-"data": null
-}
-},
-"links": {
-"self": "https://api.up.com.au/api/v1/transactions/6035d589-42a1-44b0-9007-754119a5d04a"
-}
-}
+  "data": {
+    "type": "transactions",
+    "id": "6035d589-42a1-44b0-9007-754119a5d04a",
+    "attributes": {
+      "status": "SETTLED",
+      "rawText": "WARUNG BEBEK, UBUD INDONES",
+      "description": "Warung Bebek Bengil",
+      "message": null,
+      "isCategorizable": true,
+      "holdInfo": {
+        "amount": {
+          "currencyCode": "AUD",
+          "value": "-107.92",
+          "valueInBaseUnits": -10792
+        },
+        "foreignAmount": null
+      },
+      "roundUp": {
+        "amount": {
+          "currencyCode": "AUD",
+          "value": "-0.08",
+          "valueInBaseUnits": -8
+        },
+        "boostPortion": null
+      },
+      "cashback": null,
+      "amount": {
+        "currencyCode": "AUD",
+        "value": "-107.92",
+        "valueInBaseUnits": -10792
+      },
+      "foreignAmount": {
+        "currencyCode": "IDR",
+        "value": "-1053698.77",
+        "valueInBaseUnits": -105369877
+      },
+      "cardPurchaseMethod": {
+        "method": "CARD_ON_FILE",
+        "cardNumberSuffix": "0001"
+      },
+      "settledAt": "2025-05-31T04:00:00+10:00",
+      "createdAt": "2025-05-31T04:00:00+10:00",
+      "transactionType": null,
+      "note": null,
+      "performingCustomer": {
+        "displayName": "Bobby"
+      },
+      "deepLinkURL": "up://transaction/VHJhbnNhY3Rpb24tMTE2"
+    },
+    "relationships": {
+      "account": {
+        "data": {
+          "type": "accounts",
+          "id": "00cc7754-c332-48e5-894e-05250d3dbc6c"
+        },
+        "links": {
+          "related": "https://api.up.com.au/api/v1/accounts/00cc7754-c332-48e5-894e-05250d3dbc6c"
+        }
+      },
+      "transferAccount": {
+        "data": null
+      },
+      "category": {
+        "data": null,
+        "links": {
+          "self": "https://api.up.com.au/api/v1/transactions/6035d589-42a1-44b0-9007-754119a5d04a/relationships/category"
+        }
+      },
+      "parentCategory": {
+        "data": null
+      },
+      "tags": {
+        "data": [],
+        "links": {
+          "self": "https://api.up.com.au/api/v1/transactions/6035d589-42a1-44b0-9007-754119a5d04a/relationships/tags"
+        }
+      },
+      "attachment": {
+        "data": null
+      }
+    },
+    "links": {
+      "self": "https://api.up.com.au/api/v1/transactions/6035d589-42a1-44b0-9007-754119a5d04a"
+    }
+  }
 }
 ```
 
---------------------------------
+---
 
 ### Up API Ping Endpoint Authenticated Usage
 
@@ -1227,7 +1227,7 @@ curl https://api.up.com.au/api/v1/util/ping \
 }
 ```
 
---------------------------------
+---
 
 ### Sample JSON Response for Paginated Endpoints
 
@@ -1245,7 +1245,7 @@ Illustrates the typical structure of a paginated response from the Up Banking AP
 }
 ```
 
---------------------------------
+---
 
 ### Create Webhook API Endpoint (`POST /webhooks`)
 
@@ -1269,7 +1269,7 @@ POST /webhooks
         description: The webhook that was created. (References the WebhookResource schema)
 ```
 
---------------------------------
+---
 
 ### API Documentation: Handle Incoming Webhook Events
 
@@ -1291,7 +1291,7 @@ Response Requirements:
   Timeliness: Respond within 30 seconds to avoid timeout.
 ```
 
---------------------------------
+---
 
 ### Example Transaction List API Response
 
@@ -1301,36 +1301,36 @@ Illustrates a sample JSON response structure for a list of transactions returned
 
 ```json
 {
-"data": [
-{
-"type": "transactions",
-"id": "890d5c10-1fbd-4202-be75-bda6f7b7530b",
-"attributes": {
-"status": "HELD",
-"rawText": "Spotify 0123456789",
-"description": "Spotify",
-"message": null,
-"isCategorizable": true,
-"holdInfo": {
-"amount": {
-"currencyCode": "AUD",
-"value": "-11.95",
-"valueInBaseUnits": -1195
-},
-"foreignAmount": null
-},
-"roundUp": null,
-"cashback": null,
-"amount": {
-"currencyCode": "AUD"
-}
-}
-}
-]
+  "data": [
+    {
+      "type": "transactions",
+      "id": "890d5c10-1fbd-4202-be75-bda6f7b7530b",
+      "attributes": {
+        "status": "HELD",
+        "rawText": "Spotify 0123456789",
+        "description": "Spotify",
+        "message": null,
+        "isCategorizable": true,
+        "holdInfo": {
+          "amount": {
+            "currencyCode": "AUD",
+            "value": "-11.95",
+            "valueInBaseUnits": -1195
+          },
+          "foreignAmount": null
+        },
+        "roundUp": null,
+        "cashback": null,
+        "amount": {
+          "currencyCode": "AUD"
+        }
+      }
+    }
+  ]
 }
 ```
 
---------------------------------
+---
 
 ### Sample JSON Response for Transaction Query
 
@@ -1340,78 +1340,78 @@ A sample JSON payload representing a successful response from the Up API when qu
 
 ```json
 {
-"data": [
-{
-"type": "transactions",
-"id": "09d0428f-2d7e-499a-8f61-e27a04c5eb43",
-"attributes": {
-"status": "SETTLED",
-"rawText": null,
-"description": "David Taylor",
-"message": "Money for the pizzas last night.",
-"isCategorizable": true,
-"holdInfo": null,
-"roundUp": null,
-"cashback": null,
-"amount": {
-"currencyCode": "AUD",
-"value": "-59.98",
-"valueInBaseUnits": -5998
-},
-"foreignAmount": null,
-"cardPurchaseMethod": null,
-"settledAt": "2025-06-02T17:19:41+10:00",
-"createdAt": "2025-06-02T17:19:41+10:00",
-"transactionType": null,
-"note": null,
-"performingCustomer": {
-"displayName": "Bobby"
-},
-"deepLinkURL": "up://transaction/VHJhbnNhY3Rpb24tMTA4"
-},
-"relationships": {
-"account": {
-"data": {
-"type": "accounts",
-"id": "ecaf05a6-4eaa-46e7-b587-dff2ba500b0a"
-},
-"links": {
-"related": "https://api.up.com.au/api/v1/accounts/ecaf05a6-4eaa-46e7-b587-dff2ba500b0a"
-}
-},
-"transferAccount": {
-"data": null
-},
-"category": {
-"data": null,
-"links": {
-"self": "https://api.up.com.au/api/v1/transactions/09d0428f-2d7e-499a-8f61-e27a04c5eb43/relationships/category"
-}
-},
-"parentCategory": {
-"data": null
-},
-"tags": {
-"data": [
-{
-"type": "tags",
-"id": "Pizza Night"
-}
-],
-"links": {
-"self": "https://api.up.com.au/api/v1/transactions/09d0428f-2d7e-499a-8f61-e27a04c5eb43/relationships/tags"
-}
-},
-"attachment": {
-"data": null
-}
-}
-}
-]
+  "data": [
+    {
+      "type": "transactions",
+      "id": "09d0428f-2d7e-499a-8f61-e27a04c5eb43",
+      "attributes": {
+        "status": "SETTLED",
+        "rawText": null,
+        "description": "David Taylor",
+        "message": "Money for the pizzas last night.",
+        "isCategorizable": true,
+        "holdInfo": null,
+        "roundUp": null,
+        "cashback": null,
+        "amount": {
+          "currencyCode": "AUD",
+          "value": "-59.98",
+          "valueInBaseUnits": -5998
+        },
+        "foreignAmount": null,
+        "cardPurchaseMethod": null,
+        "settledAt": "2025-06-02T17:19:41+10:00",
+        "createdAt": "2025-06-02T17:19:41+10:00",
+        "transactionType": null,
+        "note": null,
+        "performingCustomer": {
+          "displayName": "Bobby"
+        },
+        "deepLinkURL": "up://transaction/VHJhbnNhY3Rpb24tMTA4"
+      },
+      "relationships": {
+        "account": {
+          "data": {
+            "type": "accounts",
+            "id": "ecaf05a6-4eaa-46e7-b587-dff2ba500b0a"
+          },
+          "links": {
+            "related": "https://api.up.com.au/api/v1/accounts/ecaf05a6-4eaa-46e7-b587-dff2ba500b0a"
+          }
+        },
+        "transferAccount": {
+          "data": null
+        },
+        "category": {
+          "data": null,
+          "links": {
+            "self": "https://api.up.com.au/api/v1/transactions/09d0428f-2d7e-499a-8f61-e27a04c5eb43/relationships/category"
+          }
+        },
+        "parentCategory": {
+          "data": null
+        },
+        "tags": {
+          "data": [
+            {
+              "type": "tags",
+              "id": "Pizza Night"
+            }
+          ],
+          "links": {
+            "self": "https://api.up.com.au/api/v1/transactions/09d0428f-2d7e-499a-8f61-e27a04c5eb43/relationships/tags"
+          }
+        },
+        "attachment": {
+          "data": null
+        }
+      }
+    }
+  ]
 }
 ```
 
---------------------------------
+---
 
 ### Fetch Filtered Transactions via cURL
 
@@ -1428,7 +1428,7 @@ curl https://api.up.com.au/api/v1/transactions \
 -d 'filter[status]=SETTLED'
 ```
 
---------------------------------
+---
 
 ### Up API Webhooks List Endpoint Definition
 
@@ -1453,7 +1453,7 @@ GET /webhooks
             secretKey: string (optional)
 ```
 
---------------------------------
+---
 
 ### API Documentation: List Webhook Delivery Logs
 
@@ -1501,7 +1501,7 @@ Returns:
       next: string (nullable) (The link to the next page in the results.)
 ```
 
---------------------------------
+---
 
 ### API Documentation: List All Categories
 
@@ -1545,7 +1545,7 @@ Returns:
         self: string (The canonical link to this resource within the API.)
 ```
 
---------------------------------
+---
 
 ### Sample JSON Response for Webhooks List
 
@@ -1583,7 +1583,7 @@ Illustrative JSON response showing the structure of data returned when retrievin
 }
 ```
 
---------------------------------
+---
 
 ### Verify Access Token with cURL Ping Request
 
@@ -1596,7 +1596,7 @@ curl https://api.up.com.au/api/v1/util/ping \
 -H "Authorization: Bearer $your_access_token"
 ```
 
---------------------------------
+---
 
 ### Retrieve Specific Attachment API Endpoint and Example
 
@@ -1638,35 +1638,35 @@ curl https://api.up.com.au/api/v1/attachments/9533f431-91e1-4ca6-bc8d-fdc43d4e16
 
 ```json
 {
-"data": {
-"type": "attachments",
-"id": "9533f431-91e1-4ca6-bc8d-fdc43d4e1630",
-"attributes": {
-"createdAt": "2025-06-04T00:21:31+10:00",
-"fileURL": "http://localhost:8080/asset/customer_transaction_attachment.jpg?filename=uploads%2Fcustomer_transaction_attachments%2Fmodels%2Fattachment%2Ffile%2F11%2Fattachment.jpg&timestamp=1748960491&token=c522c0c063dd218b8af648f75d1360639c25d9e072510b3f0a52f07047ce3319",
-"fileURLExpiresAt": "2025-06-04T00:36:31+10:00",
-"fileExtension": "jpg",
-"fileContentType": "image/jpeg"
-},
-"relationships": {
-"transaction": {
-"data": {
-"type": "transactions",
-"id": "490e4a01-830a-4286-9aef-5f30e22a9d64"
-},
-"links": {
-"related": "https://api.up.com.au/api/v1/transactions/490e4a01-830a-4286-9aef-5f30e22a9d64"
-}
-}
-},
-"links": {
-"self": "https://api.up.com.au/api/v1/attachments/9533f431-91e1-4ca6-bc8d-fdc43d4e1630"
-}
-}
+  "data": {
+    "type": "attachments",
+    "id": "9533f431-91e1-4ca6-bc8d-fdc43d4e1630",
+    "attributes": {
+      "createdAt": "2025-06-04T00:21:31+10:00",
+      "fileURL": "http://localhost:8080/asset/customer_transaction_attachment.jpg?filename=uploads%2Fcustomer_transaction_attachments%2Fmodels%2Fattachment%2Ffile%2F11%2Fattachment.jpg&timestamp=1748960491&token=c522c0c063dd218b8af648f75d1360639c25d9e072510b3f0a52f07047ce3319",
+      "fileURLExpiresAt": "2025-06-04T00:36:31+10:00",
+      "fileExtension": "jpg",
+      "fileContentType": "image/jpeg"
+    },
+    "relationships": {
+      "transaction": {
+        "data": {
+          "type": "transactions",
+          "id": "490e4a01-830a-4286-9aef-5f30e22a9d64"
+        },
+        "links": {
+          "related": "https://api.up.com.au/api/v1/transactions/490e4a01-830a-4286-9aef-5f30e22a9d64"
+        }
+      }
+    },
+    "links": {
+      "self": "https://api.up.com.au/api/v1/attachments/9533f431-91e1-4ca6-bc8d-fdc43d4e1630"
+    }
+  }
 }
 ```
 
---------------------------------
+---
 
 ### Up Banking API Endpoints Reference
 
@@ -1706,7 +1706,7 @@ API Endpoints:
     - Handling webhook events: POST /webhookURL (callback)
 ```
 
---------------------------------
+---
 
 ### Retrieve Specific Account: Sample Response (JSON)
 
@@ -1716,35 +1716,35 @@ An example JSON response for retrieving a single account, detailing its attribut
 
 ```json
 {
-"data": {
-"type": "accounts",
-"id": "f95ce3b0-ddd5-46cc-a573-b976ee9bde57",
-"attributes": {
-"displayName": "🐷 Savings",
-"accountType": "SAVER",
-"ownershipType": "INDIVIDUAL",
-"balance": {
-"currencyCode": "AUD",
-"value": "125.36",
-"valueInBaseUnits": 12536
-},
-"createdAt": "2025-06-04T00:21:29+10:00"
-},
-"relationships": {
-"transactions": {
-"links": {
-"related": "https://api.up.com.au/api/v1/accounts/f95ce3b0-ddd5-46cc-a573-b976ee9bde57/transactions"
-}
-}
-},
-"links": {
-"self": "https://api.up.com.au/api/v1/accounts/f95ce3b0-ddd5-46cc-a573-b976ee9bde57"
-}
-}
+  "data": {
+    "type": "accounts",
+    "id": "f95ce3b0-ddd5-46cc-a573-b976ee9bde57",
+    "attributes": {
+      "displayName": "🐷 Savings",
+      "accountType": "SAVER",
+      "ownershipType": "INDIVIDUAL",
+      "balance": {
+        "currencyCode": "AUD",
+        "value": "125.36",
+        "valueInBaseUnits": 12536
+      },
+      "createdAt": "2025-06-04T00:21:29+10:00"
+    },
+    "relationships": {
+      "transactions": {
+        "links": {
+          "related": "https://api.up.com.au/api/v1/accounts/f95ce3b0-ddd5-46cc-a573-b976ee9bde57/transactions"
+        }
+      }
+    },
+    "links": {
+      "self": "https://api.up.com.au/api/v1/accounts/f95ce3b0-ddd5-46cc-a573-b976ee9bde57"
+    }
+  }
 }
 ```
 
---------------------------------
+---
 
 ### Up API Utility Ping Endpoint Definition
 
@@ -1771,7 +1771,7 @@ GET /util/ping
             pointer: string (optional, if error relates to an attribute in request body, rfc-6901 JSON pointer)
 ```
 
---------------------------------
+---
 
 ### Delete Webhook Sample Request (curl)
 
@@ -1785,7 +1785,7 @@ curl https://api.up.com.au/api/v1/webhooks/508e45c0-bbc5-470c-b433-39fdd1ffae84 
 -H 'Authorization: Bearer up:demo:jrHnHiaILBIxb3dE'
 ```
 
---------------------------------
+---
 
 ### Up Banking API Base URL
 
@@ -1797,7 +1797,7 @@ The foundational URL to which all specific Up Banking API endpoint paths must be
 https://api.up.com.au/api/v1
 ```
 
---------------------------------
+---
 
 ### CardPurchaseMethod Data Structures and Enum
 
@@ -1814,7 +1814,7 @@ CardPurchaseMethodObject:
   cardNumberSuffix: string (nullable) (The last four digits of the card used for the purchase, if applicable.)
 ```
 
---------------------------------
+---
 
 ### Sample cURL Request: List Categories with Parent Filter
 
@@ -1829,7 +1829,7 @@ curl https://api.up.com.au/api/v1/categories \
 -d 'filter[parent]=good-life'
 ```
 
---------------------------------
+---
 
 ### Fetch Transactions for an Account with Filters
 
@@ -1846,7 +1846,7 @@ curl https://api.up.com.au/api/v1/accounts/eaf01bef-8560-45cd-b1ae-1a2c1b04a21a/
 -d 'filter[category]=good-life'
 ```
 
---------------------------------
+---
 
 ### Ping Webhook API Endpoint Documentation
 
@@ -1920,7 +1920,7 @@ data
             string
 ```
 
---------------------------------
+---
 
 ### Sample cURL Request: Retrieve a Single Category
 
@@ -1933,7 +1933,7 @@ curl https://api.up.com.au/api/v1/categories/home \
 -H 'Authorization: Bearer up:demo:DZPIYOUDRl6XQuyp'
 ```
 
---------------------------------
+---
 
 ### API Authentication Header Format
 
@@ -1945,7 +1945,7 @@ Illustrates the required format for the `Authorization` header when making authe
 Authorization: Bearer $your_access_token
 ```
 
---------------------------------
+---
 
 ### Verify Up Webhook Signature using HMAC SHA-256
 
@@ -2011,7 +2011,7 @@ func handleWebhookEvent(w http.ResponseWriter, r *http.Request) {
 }
 ```
 
---------------------------------
+---
 
 ### CashbackObject Data Structure
 
@@ -2025,7 +2025,7 @@ CashbackObject:
   amount: MoneyObject (The total amount of cashback paid, represented as a positive value.)
 ```
 
---------------------------------
+---
 
 ### Send Webhook Ping Request
 
@@ -2041,7 +2041,7 @@ curl https://api.up.com.au/api/v1/webhooks/c4dffdac-5e23-47a1-869b-2c431059a9cf/
 --data-binary ''
 ```
 
---------------------------------
+---
 
 ### Up Webhook Event API Reference
 
@@ -2120,7 +2120,7 @@ Sample Payload:
 }
 ```
 
---------------------------------
+---
 
 ### Retrieve Specific Account: Sample Request (cURL)
 
@@ -2133,7 +2133,7 @@ curl https://api.up.com.au/api/v1/accounts/f95ce3b0-ddd5-46cc-a573-b976ee9bde57 
 -H 'Authorization: Bearer up:demo:GACQDjqfwe2uE2Lv'
 ```
 
---------------------------------
+---
 
 ### Up API Ping Endpoint Unauthenticated Usage
 
@@ -2157,7 +2157,7 @@ curl https://api.up.com.au/api/v1/util/ping
 }
 ```
 
---------------------------------
+---
 
 ### Retrieve Single Transaction Details (cURL)
 
@@ -2170,7 +2170,7 @@ curl https://api.up.com.au/api/v1/transactions/6035d589-42a1-44b0-9007-754119a5d
 -H 'Authorization: Bearer up:demo:Z4Lrp87xFOHIgA2i'
 ```
 
---------------------------------
+---
 
 ### CodeBlockProps Type Definition
 
@@ -2182,7 +2182,7 @@ Defines the Flow type for the properties expected by the `MemoizedCodeBlock` com
 type CodeBlockProps = {code: string};
 ```
 
---------------------------------
+---
 
 ### API Documentation: Retrieve a Single Category by ID
 
@@ -2223,7 +2223,7 @@ Returns:
         self: string (The canonical link to this resource within the API.)
 ```
 
---------------------------------
+---
 
 ### Up API Webhook Resource Schema
 
@@ -2260,7 +2260,7 @@ WebhookResource:
       description: The link to the next page in the results. If this value is `null` there is no next page.
 ```
 
---------------------------------
+---
 
 ### RoundUpObject Data Structure
 
@@ -2274,7 +2274,7 @@ RoundUpObject:
   boostPortion: MoneyObject (nullable) (The portion of the Round Up `amount` owing to boosted Round Ups, represented as a negative value. If no boost was added to the Round Up this field will be `null`.)
 ```
 
---------------------------------
+---
 
 ### Remove Tags from Transaction
 
@@ -2286,7 +2286,7 @@ This endpoint allows removing one or more tags from a specific transaction. It u
 DELETE /transactions/{transactionId}/relationships/tags
 ```
 
---------------------------------
+---
 
 ### Transaction Details API Reference
 
@@ -2338,7 +2338,7 @@ CashbackObject:
     description: The total amount of cashback paid, represented as a positive value.
 ```
 
---------------------------------
+---
 
 ### MoneyObject Data Structure
 
@@ -2353,7 +2353,7 @@ MoneyObject:
   valueInBaseUnits: integer (The amount of money in the smallest denomination for the currency, as a 64-bit integer. For example, for an Australian dollar value of $10.56, this field will be 1056.)
 ```
 
---------------------------------
+---
 
 ### Delete Webhook API Endpoint Documentation
 
@@ -2375,7 +2375,7 @@ Returns
 204 - Deleted
 ```
 
---------------------------------
+---
 
 ### API Documentation: Categorize Transaction
 
@@ -2389,7 +2389,7 @@ PATCH /transactions/{transactionId}/relationships/category
 Description: Updates the category associated with a transaction. Only transactions for which isCategorizable is set to true support this operation. The id is taken from the list exposed on /categories and cannot be one of
 ```
 
---------------------------------
+---
 
 ### Up API Transaction Object Schema
 
@@ -2498,7 +2498,7 @@ TransactionObject:
             description: The link to retrieve the related resource(s) in this relationship.
 ```
 
---------------------------------
+---
 
 ### Initialization of Triangle Code Data and Animation Interval
 
@@ -2514,7 +2514,7 @@ const arbitraryNumberOfTrianglesLongArray = new Array(numberOfTriangles)
 const changeIntervalMs = 1000;
 ```
 
---------------------------------
+---
 
 ### Retrieve a List of Transactions
 
@@ -2578,7 +2578,7 @@ Returns:
             Description: The amount of money in the smallest denomination for the currency.
 ```
 
---------------------------------
+---
 
 ### ContainerProps Type Definition
 
@@ -2593,7 +2593,7 @@ type ContainerProps = {
 };
 ```
 
---------------------------------
+---
 
 ### Up API Transaction Resource Definition
 
@@ -2683,7 +2683,7 @@ Transaction Resource:
       Description: The link to the next page in the results. Null if no next page.
 ```
 
---------------------------------
+---
 
 ### Up API Transaction Object Schema
 
@@ -2752,7 +2752,7 @@ Transaction Object:
     next: string (nullable, link to next page in results)
 ```
 
---------------------------------
+---
 
 ### Up Webhook Event Type Definitions
 
@@ -2784,7 +2784,7 @@ Event Types:
     Note: No link is provided to the transaction within the Up API as it no longer exists.
 ```
 
---------------------------------
+---
 
 ### API Error Response Object Structure
 
@@ -2813,7 +2813,7 @@ Generic Error Response:
     Description: The list of errors returned in this response.
 ```
 
---------------------------------
+---
 
 ### Retrieve a Specific Transaction by ID
 
@@ -2898,7 +2898,7 @@ Returns:
               The amount of money in the smallest denomination.
 ```
 
---------------------------------
+---
 
 ### React Component for Dynamic Code Display with Triangle Layout
 
@@ -2935,7 +2935,7 @@ const MemoizedTriangleCode = React.memo<ContainerProps>(function TriangleCode({c
 export default MemoizedTriangleCode;
 ```
 
---------------------------------
+---
 
 ### Memoized React Component for Dynamic Triangle Code Display
 
@@ -2961,7 +2961,7 @@ const MemoizedTriangleCode = React.memo<ContainerProps>(function TriangleCode({c
 export default MemoizedTriangleCode;
 ```
 
---------------------------------
+---
 
 ### Styling Constants for Code Block and Triangles
 
@@ -2970,7 +2970,7 @@ Source: https://developer.up.com.au/index
 Defines constant objects for inline styles applied to the `CodeBlock` component and the `div` elements forming the triangular shapes. `codeBlockStyle` sets text wrapping and opacity, while `leftTriangletyle` and `rightTriangleStyle` use `shape-outside` to create CSS exclusion shapes for the triangular effect.
 
 ```javascript
-const codeBlockStyle = {whiteSpace: 'normal', opacity: 0.8, lineBreak: 'anywhere'};
+const codeBlockStyle = { whiteSpace: 'normal', opacity: 0.8, lineBreak: 'anywhere' };
 const leftTriangletyle = {
   shapeOutside: 'polygon(0 0, 100% 0, 0 100%)',
   height: 700,
@@ -2981,7 +2981,7 @@ const rightTriangleStyle = {
 };
 ```
 
---------------------------------
+---
 
 ### Add Tags to Transaction
 
@@ -3028,7 +3028,7 @@ curl https://api.up.com.au/api/v1/transactions/0c322745-66ab-4944-8737-7efbb776e
 }'
 ```
 
---------------------------------
+---
 
 ### Memoized React Component for Styled Code Block Display
 
@@ -3063,7 +3063,7 @@ const MemoizedCodeBlock = React.memo<CodeBlockProps>(function Code({code}: CodeB
 });
 ```
 
---------------------------------
+---
 
 ### Triangle Container Component for Code Blocks
 
@@ -3081,7 +3081,7 @@ const Triangle = function Triangle({className, code}: Props) {
 };
 ```
 
---------------------------------
+---
 
 ### Core Transaction Field Definitions
 
@@ -3100,7 +3100,7 @@ TransactionFields:
   settledAt: string (date-time)
 ```
 
---------------------------------
+---
 
 ### Memoized Triangle Code Display Orchestration Component
 
@@ -3122,7 +3122,7 @@ const MemoizedTriangleCode = React.memo<ContainerProps>(function TriangleCode({c
 export default MemoizedTriangleCode;
 ```
 
---------------------------------
+---
 
 ### React Component for Wrapping Memoized Code Block
 
@@ -3140,7 +3140,7 @@ const Triangle = function Triangle({className, code}: Props) {
 };
 ```
 
---------------------------------
+---
 
 ### Update Transaction Category (Set or Decategorize)
 
@@ -3181,7 +3181,7 @@ curl https://api.up.com.au/api/v1/transactions/ecf4810e-2b08-4cb1-9589-56b457bc2
 }'
 ```
 
---------------------------------
+---
 
 ### Memoized Code Block Component with Triangular Overlays
 
@@ -3206,7 +3206,7 @@ const MemoizedCodeBlock = React.memo<CodeBlockProps>(function Code({code}: CodeB
 });
 ```
 
---------------------------------
+---
 
 ### React Hook for Managing Triangle Display Index
 
@@ -3227,7 +3227,7 @@ const useTriangleIndex = () => {
 };
 ```
 
---------------------------------
+---
 
 ### useTriangleIndex Custom Animation Hook
 
@@ -3247,7 +3247,7 @@ const useTriangleIndex = () => {
 };
 ```
 
---------------------------------
+---
 
 ### Disassociate Tags from a Transaction
 

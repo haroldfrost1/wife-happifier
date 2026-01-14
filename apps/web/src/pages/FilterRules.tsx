@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from 'react';
 import {
   Table,
   TableBody,
@@ -6,17 +6,17 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+} from '@/components/ui/table';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Trash2, Plus } from "lucide-react";
+} from '@/components/ui/select';
+import { Trash2, Plus } from 'lucide-react';
 
 interface FilterRule {
   id: number;
@@ -25,7 +25,7 @@ interface FilterRule {
   value: string;
 }
 
-import { API_URL } from "@/config";
+import { API_URL } from '@/config';
 
 const getFilterRules = async () => {
   const res = await fetch(`${API_URL}/filter-rules`);
@@ -35,9 +35,9 @@ const getFilterRules = async () => {
 export default function FilterRules() {
   const [rules, setRules] = useState<FilterRule[]>([]);
   const [newRule, setNewRule] = useState({
-    field: "description",
-    operator: "contains",
-    value: "",
+    field: 'description',
+    operator: 'contains',
+    value: '',
   });
 
   const fetchRules = useCallback(async () => {
@@ -53,18 +53,18 @@ export default function FilterRules() {
     if (!newRule.value) return;
 
     await fetch(`${API_URL}/filter-rules`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(newRule),
     });
 
-    setNewRule({ field: "description", operator: "contains", value: "" });
+    setNewRule({ field: 'description', operator: 'contains', value: '' });
     fetchRules();
   };
 
   const handleDeleteRule = async (id: number) => {
     await fetch(`${API_URL}/filter-rules/${id}`, {
-      method: "DELETE",
+      method: 'DELETE',
     });
     fetchRules();
   };
@@ -81,7 +81,7 @@ export default function FilterRules() {
           <label className="text-sm font-medium">Field</label>
           <Select
             value={newRule.field}
-            onValueChange={(val) => setNewRule({ ...newRule, field: val })}
+            onValueChange={val => setNewRule({ ...newRule, field: val })}
           >
             <SelectTrigger>
               <SelectValue placeholder="Field" />
@@ -98,7 +98,7 @@ export default function FilterRules() {
           <label className="text-sm font-medium">Operator</label>
           <Select
             value={newRule.operator}
-            onValueChange={(val) => setNewRule({ ...newRule, operator: val })}
+            onValueChange={val => setNewRule({ ...newRule, operator: val })}
           >
             <SelectTrigger>
               <SelectValue placeholder="Operator" />
@@ -116,7 +116,7 @@ export default function FilterRules() {
           <label className="text-sm font-medium">Value</label>
           <Input
             value={newRule.value}
-            onChange={(e) => setNewRule({ ...newRule, value: e.target.value })}
+            onChange={e => setNewRule({ ...newRule, value: e.target.value })}
             placeholder="Value to match"
           />
         </div>
@@ -137,11 +137,9 @@ export default function FilterRules() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {rules.map((rule) => (
+            {rules.map(rule => (
               <TableRow key={rule.id}>
-                <TableCell className="font-medium capitalize">
-                  {rule.field}
-                </TableCell>
+                <TableCell className="font-medium capitalize">{rule.field}</TableCell>
                 <TableCell className="capitalize">{rule.operator}</TableCell>
                 <TableCell>{rule.value}</TableCell>
                 <TableCell>
@@ -158,12 +156,8 @@ export default function FilterRules() {
             ))}
             {rules.length === 0 && (
               <TableRow>
-                <TableCell
-                  colSpan={4}
-                  className="text-center h-24 text-muted-foreground"
-                >
-                  No filter rules found. All transactions are included in
-                  reports.
+                <TableCell colSpan={4} className="text-center h-24 text-muted-foreground">
+                  No filter rules found. All transactions are included in reports.
                 </TableCell>
               </TableRow>
             )}

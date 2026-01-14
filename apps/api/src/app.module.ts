@@ -38,4 +38,4 @@ import { RecurringPayment } from './budget/recurring-payment.entity';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {}

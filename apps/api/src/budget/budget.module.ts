@@ -6,9 +6,9 @@ import { RecurringPayment } from './recurring-payment.entity';
 import { SpendingsModule } from '../spendings/spendings.module';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([RecurringPayment]), SpendingsModule],
-    controllers: [BudgetController],
-    providers: [BudgetService],
-    exports: [BudgetService],
+  imports: [TypeOrmModule.forFeature([RecurringPayment]), SpendingsModule],
+  controllers: [BudgetController],
+  providers: [BudgetService],
+  exports: [BudgetService],
 })
-export class BudgetModule { }
+export class BudgetModule {}

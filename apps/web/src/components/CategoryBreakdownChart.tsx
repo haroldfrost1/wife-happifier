@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from "react";
-import * as d3 from "d3";
+import React, { useEffect, useRef } from 'react';
+import * as d3 from 'd3';
 
 interface CategoryBreakdownData {
   category: string;
@@ -10,9 +10,7 @@ interface CategoryBreakdownChartProps {
   data: CategoryBreakdownData[];
 }
 
-export const CategoryBreakdownChart: React.FC<CategoryBreakdownChartProps> = ({
-  data,
-}) => {
+export const CategoryBreakdownChart: React.FC<CategoryBreakdownChartProps> = ({ data }) => {
   const svgRef = useRef<SVGSVGElement>(null);
 
   useEffect(() => {
@@ -25,25 +23,25 @@ export const CategoryBreakdownChart: React.FC<CategoryBreakdownChartProps> = ({
     const radius = Math.min(width, height) / 2 - margin;
 
     // Clear previous
-    d3.select(svgRef.current).selectAll("*").remove();
+    d3.select(svgRef.current).selectAll('*').remove();
 
     const svg = d3
       .select(svgRef.current)
-      .attr("width", width)
-      .attr("height", height)
-      .append("g")
-      .attr("transform", `translate(${width / 2},${height / 2})`);
+      .attr('width', width)
+      .attr('height', height)
+      .append('g')
+      .attr('transform', `translate(${width / 2},${height / 2})`);
 
     // Color palette
     const color = d3
       .scaleOrdinal()
-      .domain(data.map((d) => d.category))
+      .domain(data.map(d => d.category))
       .range(d3.schemeSet2);
 
     // Compute the position of each group on the pie:
     const pie = d3
       .pie<CategoryBreakdownData>()
-      .value((d) => d.amount)
+      .value(d => d.amount)
       .sort(null); // Do not sort if we want to keep order, or sort by size?
 
     const data_ready = pie(data);
@@ -61,18 +59,18 @@ export const CategoryBreakdownChart: React.FC<CategoryBreakdownChartProps> = ({
 
     // Build the pie chart: Basically, each part of the pie is a path that we build using the arc function.
     svg
-      .selectAll("allSlices")
+      .selectAll('allSlices')
       .data(data_ready)
-      .join("path")
-      .attr("d", arc)
-      .attr("fill", (d) => color(d.data.category) as string)
-      .attr("stroke", "white")
-      .style("stroke-width", "2px")
-      .style("opacity", 0.7);
+      .join('path')
+      .attr('d', arc)
+      .attr('fill', d => color(d.data.category) as string)
+      .attr('stroke', 'white')
+      .style('stroke-width', '2px')
+      .style('opacity', 0.7);
 
     // Compute label positions and resolve collisions
     const labelHeight = 14;
-    const labels = data_ready.map((d) => {
+    const labels = data_ready.map(d => {
       const posA = arc.centroid(d);
       const posB = outerArc.centroid(d);
       const posC = outerArc.centroid(d);
@@ -88,7 +86,7 @@ export const CategoryBreakdownChart: React.FC<CategoryBreakdownChartProps> = ({
         posB,
         posC,
         isRight,
-        textAnchor: isRight ? "start" : ("end" as "start" | "end"),
+        textAnchor: isRight ? 'start' : ('end' as 'start' | 'end'),
       };
     });
 
@@ -121,35 +119,35 @@ export const CategoryBreakdownChart: React.FC<CategoryBreakdownChartProps> = ({
     };
 
     // Process left and right sides separately
-    const rightLabels = labels.filter((l) => l.isRight);
-    const leftLabels = labels.filter((l) => !l.isRight);
+    const rightLabels = labels.filter(l => l.isRight);
+    const leftLabels = labels.filter(l => !l.isRight);
 
     resolveCollisions(rightLabels);
     resolveCollisions(leftLabels);
 
     // Draw Polylines
     svg
-      .selectAll("allPolylines")
+      .selectAll('allPolylines')
       .data(labels) // use processed labels
-      .join("polyline")
-      .attr("stroke", "black")
-      .style("fill", "none")
-      .attr("stroke-width", 1)
-      .attr("points", (l) => {
-        return [l.posA, l.posB, l.posC].map((p) => p.join(",")).join(" ");
+      .join('polyline')
+      .attr('stroke', 'black')
+      .style('fill', 'none')
+      .attr('stroke-width', 1)
+      .attr('points', l => {
+        return [l.posA, l.posB, l.posC].map(p => p.join(',')).join(' ');
       });
 
     // Draw Label Text
     svg
-      .selectAll("allLabels")
+      .selectAll('allLabels')
       .data(labels)
-      .join("text")
-      .text((l) => l.d.data.category)
-      .attr("transform", (l) => `translate(${l.posC})`)
-      .style("text-anchor", (l) => l.textAnchor)
-      .style("font-size", "12px")
-      .attr("dx", (l) => (l.isRight ? 5 : -5)) // Add padding
-      .attr("dy", 4); // Center vertically
+      .join('text')
+      .text(l => l.d.data.category)
+      .attr('transform', l => `translate(${l.posC})`)
+      .style('text-anchor', l => l.textAnchor)
+      .style('font-size', '12px')
+      .attr('dx', l => (l.isRight ? 5 : -5)) // Add padding
+      .attr('dy', 4); // Center vertically
   }, [data]);
 
   return <svg ref={svgRef}></svg>;

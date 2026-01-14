@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { MonthlyHistoryChart } from "./components/MonthlyHistoryChart";
-import { CategoryBreakdownChart } from "./components/CategoryBreakdownChart";
-import { Loader2, ChevronLeft, ChevronRight } from "lucide-react";
-import { Transaction } from "@wife-happifier/shared";
-import { Button } from "@/components/ui/button";
+import { useEffect, useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { MonthlyHistoryChart } from './components/MonthlyHistoryChart';
+import { CategoryBreakdownChart } from './components/CategoryBreakdownChart';
+import { Loader2, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Transaction } from '@wife-happifier/shared';
+import { Button } from '@/components/ui/button';
 import {
   Table,
   TableBody,
@@ -12,9 +12,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from '@/components/ui/table';
 
-import { API_URL } from "@/config";
+import { API_URL } from '@/config';
 
 interface MonthlyReportItem {
   month: string;
@@ -60,7 +60,7 @@ export default function Dashboard() {
   const fetchHistory = async () => {
     try {
       const res = await fetch(`${API_URL}/transactions/monthly-report`);
-      if (!res.ok) throw new Error("Failed to fetch monthly report");
+      if (!res.ok) throw new Error('Failed to fetch monthly report');
       const data = await res.json();
       setHistory(data);
     } catch (error) {
@@ -72,10 +72,8 @@ export default function Dashboard() {
 
   const fetchBreakdown = async (month: string) => {
     try {
-      const res = await fetch(
-        `${API_URL}/transactions/category-breakdown?month=${month}`
-      );
-      if (!res.ok) throw new Error("Failed to fetch breakdown category");
+      const res = await fetch(`${API_URL}/transactions/category-breakdown?month=${month}`);
+      if (!res.ok) throw new Error('Failed to fetch breakdown category');
       const data = await res.json();
       setBreakdown(data);
     } catch (error) {
@@ -86,9 +84,9 @@ export default function Dashboard() {
   const fetchTransactions = async (month: string, pageNum: number) => {
     try {
       const res = await fetch(
-        `${API_URL}/transactions/by-month?month=${month}&page=${pageNum}&limit=10`
+        `${API_URL}/transactions/by-month?month=${month}&page=${pageNum}&limit=10`,
       );
-      if (!res.ok) throw new Error("Failed to fetch monthly transactions");
+      if (!res.ok) throw new Error('Failed to fetch monthly transactions');
       const data = await res.json();
       setTransactions(data.data);
       setTotalPages(data.meta.lastPage);
@@ -106,13 +104,13 @@ export default function Dashboard() {
   }
 
   // Calculate current month stats (from selected month or latest)
-  const currentStat = history.find((h) => h.month === selectedMonth) ||
+  const currentStat = history.find(h => h.month === selectedMonth) ||
     history[0] || { income: 0, expense: 0, netSavings: 0 };
 
   const formatCurrency = (val: number) =>
-    new Intl.NumberFormat("en-AU", {
-      style: "currency",
-      currency: "AUD",
+    new Intl.NumberFormat('en-AU', {
+      style: 'currency',
+      currency: 'AUD',
     }).format(val);
 
   return (
@@ -123,10 +121,10 @@ export default function Dashboard() {
           {/* Simple month selector if needed, for now just using history chart interactions or dropdown */}
           <select
             className="h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-            value={selectedMonth || ""}
-            onChange={(e) => setSelectedMonth(e.target.value)}
+            value={selectedMonth || ''}
+            onChange={e => setSelectedMonth(e.target.value)}
           >
-            {history.map((h) => (
+            {history.map(h => (
               <option key={h.month} value={h.month}>
                 {h.month}
               </option>
@@ -144,7 +142,7 @@ export default function Dashboard() {
           <CardContent>
             <div
               className={`text-2xl font-bold ${
-                currentStat.netSavings >= 0 ? "text-green-600" : "text-red-600"
+                currentStat.netSavings >= 0 ? 'text-green-600' : 'text-red-600'
               }`}
             >
               {formatCurrency(currentStat.netSavings)}
@@ -164,9 +162,7 @@ export default function Dashboard() {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Total Expenses
-            </CardTitle>
+            <CardTitle className="text-sm font-medium">Total Expenses</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-red-600">
@@ -214,14 +210,14 @@ export default function Dashboard() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {transactions.map((t) => (
+              {transactions.map(t => (
                 <TableRow key={t.id}>
                   <TableCell>{t.date}</TableCell>
                   <TableCell>{t.description}</TableCell>
-                  <TableCell>{t.category || "-"}</TableCell>
+                  <TableCell>{t.category || '-'}</TableCell>
                   <TableCell
                     className={`text-right ${
-                      Number(t.amount) > 0 ? "text-green-600" : "text-red-600"
+                      Number(t.amount) > 0 ? 'text-green-600' : 'text-red-600'
                     }`}
                   >
                     {formatCurrency(Number(t.amount))}
@@ -230,10 +226,7 @@ export default function Dashboard() {
               ))}
               {transactions.length === 0 && (
                 <TableRow>
-                  <TableCell
-                    colSpan={4}
-                    className="text-center text-muted-foreground"
-                  >
+                  <TableCell colSpan={4} className="text-center text-muted-foreground">
                     No transactions found for this month.
                   </TableCell>
                 </TableRow>
@@ -244,7 +237,7 @@ export default function Dashboard() {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => setPage((p) => Math.max(1, p - 1))}
+              onClick={() => setPage(p => Math.max(1, p - 1))}
               disabled={page === 1}
             >
               <ChevronLeft className="h-4 w-4" />
@@ -256,7 +249,7 @@ export default function Dashboard() {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+              onClick={() => setPage(p => Math.min(totalPages, p + 1))}
               disabled={page === totalPages}
             >
               Next

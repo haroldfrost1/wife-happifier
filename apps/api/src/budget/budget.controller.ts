@@ -4,25 +4,25 @@ import { RecurringPayment } from './recurring-payment.entity';
 
 @Controller('budget')
 export class BudgetController {
-    constructor(private readonly budgetService: BudgetService) { }
+  constructor(private readonly budgetService: BudgetService) {}
 
-    @Get('recurring')
-    findAll() {
-        return this.budgetService.findAll();
-    }
+  @Get('recurring')
+  findAll() {
+    return this.budgetService.findAll();
+  }
 
-    @Get('summary')
-    getSummary() {
-        return this.budgetService.getSummary();
-    }
+  @Get('summary')
+  getSummary() {
+    return this.budgetService.getSummary();
+  }
 
-    @Post('recurring')
-    create(@Body() data: Partial<RecurringPayment>) {
-        return this.budgetService.create(data);
-    }
+  @Post('recurring')
+  create(@Body() data: Partial<RecurringPayment>) {
+    return this.budgetService.create(data);
+  }
 
-    @Delete('recurring/:id')
-    delete(@Param('id') id: string) {
-        return this.budgetService.delete(+id);
-    }
+  @Delete('recurring/:id')
+  delete(@Param('id') id: string) {
+    return this.budgetService.delete(+id);
+  }
 }

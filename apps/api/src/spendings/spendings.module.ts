@@ -7,9 +7,9 @@ import { SpendingsController } from './spendings.controller';
 import { SpendingsService } from './spendings.service';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Spending]), HttpModule, NotionModule],
-    controllers: [SpendingsController],
-    providers: [SpendingsService],
-    exports: [SpendingsService],
+  imports: [TypeOrmModule.forFeature([Spending]), HttpModule, NotionModule],
+  controllers: [SpendingsController],
+  providers: [SpendingsService],
+  exports: [SpendingsService],
 })
-export class SpendingsModule { }
+export class SpendingsModule {}

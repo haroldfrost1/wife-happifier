@@ -47,7 +47,6 @@ export class TransactionsController {
   }
 
   @Get('by-month')
-  @Get('by-month')
   getTransactionsByMonth(
     @Query('month') month: string,
     @Query('page') page: number = 1,

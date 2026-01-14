@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useOutletContext } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import { useOutletContext } from 'react-router-dom';
 import {
   Table,
   TableBody,
@@ -7,15 +7,15 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, ChevronLeft, ChevronRight } from "lucide-react";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
-import { PaginatedResult, Transaction } from "@wife-happifier/shared";
+} from '@/components/ui/table';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Loader2, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
+import { PaginatedResult, Transaction } from '@wife-happifier/shared';
 
-import { API_URL } from "@/config";
+import { API_URL } from '@/config';
 
 export default function Transactions() {
   const [data, setData] = useState<PaginatedResult<Transaction> | null>(null);
@@ -29,16 +29,14 @@ export default function Transactions() {
   const fetchTransactions = async (pageNum: number) => {
     setLoading(true);
     try {
-      const res = await fetch(
-        `${API_URL}/transactions?page=${pageNum}&limit=10`
-      );
-      if (!res.ok) throw new Error("Failed to fetch");
+      const res = await fetch(`${API_URL}/transactions?page=${pageNum}&limit=10`);
+      if (!res.ok) throw new Error('Failed to fetch');
       const result = await res.json();
       setData(result);
       setError(null);
     } catch (err) {
       console.error(err);
-      setError("Could not load transactions. Is the backend running?");
+      setError('Could not load transactions. Is the backend running?');
     } finally {
       setLoading(false);
     }
@@ -49,11 +47,11 @@ export default function Transactions() {
   }, [refreshTrigger, page]);
 
   const handlePrevious = () => {
-    if (page > 1) setPage((p) => p - 1);
+    if (page > 1) setPage(p => p - 1);
   };
 
   const handleNext = () => {
-    if (data && page < data.meta.lastPage) setPage((p) => p + 1);
+    if (data && page < data.meta.lastPage) setPage(p => p + 1);
   };
 
   return (
@@ -73,9 +71,7 @@ export default function Transactions() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle>All Transactions</CardTitle>
-            <Badge variant="secondary">
-              {data ? data.meta.total : 0} records
-            </Badge>
+            <Badge variant="secondary">{data ? data.meta.total : 0} records</Badge>
           </div>
         </CardHeader>
         <CardContent>
@@ -99,30 +95,20 @@ export default function Transactions() {
                   </TableRow>
                 ) : !data || data.data.length === 0 ? (
                   <TableRow>
-                    <TableCell
-                      colSpan={5}
-                      className="h-24 text-center text-muted-foreground"
-                    >
+                    <TableCell colSpan={5} className="h-24 text-center text-muted-foreground">
                       No transactions found.
                     </TableCell>
                   </TableRow>
                 ) : (
-                  data.data.map((t) => (
+                  data.data.map(t => (
                     <TableRow key={t.id}>
-                      <TableCell className="font-medium whitespace-nowrap">
-                        {t.date}
-                      </TableCell>
-                      <TableCell
-                        className="max-w-[300px] truncate"
-                        title={t.description}
-                      >
+                      <TableCell className="font-medium whitespace-nowrap">{t.date}</TableCell>
+                      <TableCell className="max-w-[300px] truncate" title={t.description}>
                         {t.description}
                       </TableCell>
                       <TableCell
                         className={`text-right font-medium ${
-                          Number(t.amount) < 0
-                            ? "text-red-600"
-                            : "text-green-600"
+                          Number(t.amount) < 0 ? 'text-red-600' : 'text-green-600'
                         }`}
                       >
                         ${Number(t.amount).toFixed(2)}
@@ -132,7 +118,7 @@ export default function Transactions() {
                       </TableCell>
                       <TableCell>
                         <Badge variant="outline" className="font-normal">
-                          {t.category || "Uncategorized"}
+                          {t.category || 'Uncategorized'}
                         </Badge>
                       </TableCell>
                     </TableRow>

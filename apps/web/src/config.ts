@@ -7,6 +7,4 @@ declare global {
 }
 
 export const API_URL =
-  window._env_?.API_URL ||
-  import.meta.env.VITE_API_URL ||
-  "http://localhost:3000";
+  window._env_?.API_URL || import.meta.env.VITE_API_URL || 'http://localhost:3000';

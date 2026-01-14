@@ -1,0 +1,13 @@
+{
+  "name": "wife-happifier",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md}\""
+  },
+  "devDependencies": {
+    "prettier": "^3.4.2",
+    "eslint-config-prettier": "^10.0.1",
+    "eslint-plugin-prettier": "^5.2.2"
+  }
+}
