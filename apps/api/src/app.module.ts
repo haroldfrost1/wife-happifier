@@ -10,6 +10,8 @@ import { Transaction } from './transactions/transaction.entity';
 import { FilterRule } from './transactions/filter-rule.entity';
 import { SpendingsModule } from './spendings/spendings.module';
 import { Spending } from './spendings/spending.entity';
+import { BudgetModule } from './budget/budget.module';
+import { RecurringPayment } from './budget/recurring-payment.entity';
 
 @Module({
   imports: [
@@ -23,13 +25,14 @@ import { Spending } from './spendings/spending.entity';
       username: process.env.DB_USERNAME || 'postgres',
       password: process.env.DB_PASSWORD || 'postgres',
       database: process.env.DB_NAME || 'wife-happifier',
-      entities: [Transaction, FilterRule, Spending],
+      entities: [Transaction, FilterRule, Spending, RecurringPayment],
       synchronize: false, // Migrations are properly handled now
       migrationsRun: true,
       migrations: [join(__dirname, 'migrations/*.{ts,js}')],
     }),
     TransactionsModule,
     SpendingsModule,
+    BudgetModule,
     ScheduleModule.forRoot(),
   ],
   controllers: [AppController],

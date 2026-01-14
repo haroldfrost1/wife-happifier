@@ -27,6 +27,7 @@ import {
   Upload,
   Wallet,
   Filter,
+  DollarSign,
 } from "lucide-react";
 import { useRef, useState } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
@@ -52,6 +53,11 @@ const navItems: NavItem[] = [
     title: "Filter Rules",
     href: "/filter-rules",
     icon: Filter,
+  },
+  {
+    title: "Budget",
+    href: "/budget",
+    icon: DollarSign,
   },
 ];
 
@@ -121,11 +127,10 @@ export default function Layout() {
                 <Link
                   key={item.href}
                   to={item.href}
-                  className={`flex items-center gap-2 text-sm font-medium transition-colors hover:text-primary ${
-                    isActive
-                      ? "text-primary"
-                      : "text-slate-500 dark:text-slate-400"
-                  }`}
+                  className={`flex items-center gap-2 text-sm font-medium transition-colors hover:text-primary ${isActive
+                    ? "text-primary"
+                    : "text-slate-500 dark:text-slate-400"
+                    }`}
                 >
                   <item.icon className="h-4 w-4" />
                   {item.title}
@@ -213,11 +218,10 @@ export default function Layout() {
                           key={item.href}
                           to={item.href}
                           onClick={() => setIsMobileOpen(false)}
-                          className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all hover:text-primary ${
-                            isActive
-                              ? "bg-slate-100 text-primary dark:bg-slate-800"
-                              : "text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800"
-                          }`}
+                          className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all hover:text-primary ${isActive
+                            ? "bg-slate-100 text-primary dark:bg-slate-800"
+                            : "text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800"
+                            }`}
                         >
                           <item.icon className="h-4 w-4" />
                           {item.title}

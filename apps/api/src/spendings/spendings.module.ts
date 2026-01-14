@@ -9,5 +9,6 @@ import { SpendingsService } from './spendings.service';
     imports: [TypeOrmModule.forFeature([Spending]), HttpModule],
     controllers: [SpendingsController],
     providers: [SpendingsService],
+    exports: [SpendingsService],
 })
 export class SpendingsModule { }

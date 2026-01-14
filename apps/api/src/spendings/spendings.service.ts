@@ -138,4 +138,36 @@ export class SpendingsService {
             await this.spendingsRepository.save(newSpending);
         }
     }
+    async getMTDSpending(): Promise<number> {
+        const now = new Date();
+        const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+        const { sum } = await this.spendingsRepository
+            .createQueryBuilder('spending')
+            .select('SUM(spending.amount)', 'sum')
+            .where('spending.date >= :startOfMonth', { startOfMonth })
+            // We usually care about "spending", if amount is negative for expenses, we might need ABS or just sum.
+            // But looking at persistTransactions: "const amountVal = parseFloat(t.attributes.amount.value)"
+            // Up Bank API: negative for debits (expenses), positive for credits (income).
+            // Usually "Spending" MTD means "How much did I spend". So we sum negative values and negate them? 
+            // Or just return the net flow?
+            // "track the current spending" usually means Expenses.
+            // Let's filter for amount < 0 (expenses) and sum them (absolute value).
+            .andWhere('spending.amount < 0')
+            .getRawOne();
+
+        return Math.abs(parseFloat(sum || '0'));
+    }
+
+    async getYTDSpending(): Promise<number> {
+        const now = new Date();
+        const startOfYear = new Date(now.getFullYear(), 0, 1);
+        const { sum } = await this.spendingsRepository
+            .createQueryBuilder('spending')
+            .select('SUM(spending.amount)', 'sum')
+            .where('spending.date >= :startOfYear', { startOfYear })
+            .andWhere('spending.amount < 0')
+            .getRawOne();
+
+        return Math.abs(parseFloat(sum || '0'));
+    }
 }
