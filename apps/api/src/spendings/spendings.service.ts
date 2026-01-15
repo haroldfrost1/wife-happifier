@@ -9,6 +9,41 @@ import { firstValueFrom } from 'rxjs';
 import { NotionService } from '../notion/notion.service';
 import { ConfigService } from '@nestjs/config';
 
+/**
+ * Up Bank Transaction object from the API
+ */
+export interface UpBankTransaction {
+  id: string;
+  type: 'transactions';
+  attributes: {
+    status: 'HELD' | 'SETTLED';
+    rawText: string | null;
+    description: string;
+    message: string | null;
+    amount: {
+      currencyCode: string;
+      value: string;
+      valueInBaseUnits: number;
+    };
+    settledAt: string | null;
+    createdAt: string;
+  };
+  relationships: {
+    account: {
+      data: {
+        type: 'accounts';
+        id: string;
+      };
+    };
+    category: {
+      data: {
+        type: 'categories';
+        id: string;
+      } | null;
+    };
+  };
+}
+
 @Injectable()
 export class SpendingsService {
   constructor(
@@ -112,39 +147,56 @@ export class SpendingsService {
     }
   }
 
-  private async persistTransactions(transactions: any[]) {
+  private async persistTransactions(transactions: UpBankTransaction[]) {
     for (const t of transactions) {
-      const externalId = t.id;
-      // Deduplication check
-      const exists = await this.spendingsRepository.findOne({
-        where: { externalId },
-      });
-      if (exists) {
-        console.log(`Skipping duplicate transaction ${externalId}`);
-        continue;
-      }
-
-      const amountVal = parseFloat(t.attributes.amount.value);
-      const categoryId = t.relationships.category?.data?.id || null;
-
-      const newSpending = this.spendingsRepository.create({
-        date: t.attributes.createdAt,
-        description: t.attributes.description,
-        amount: amountVal,
-        category: categoryId,
-        externalId: externalId,
-      });
-      await this.spendingsRepository.save(newSpending);
-      console.log(`Saved spending for transaction ${externalId}`);
-
-      await this.syncTransactionToNotion(t, amountVal);
+      await this.processSingleTransaction(t);
     }
     console.log('All transactions persisted for current sync cycle');
   }
 
+  /**
+   * Process a single Up Bank transaction - persists to DB and syncs to Notion.
+   * Used by both batch sync and webhook handlers.
+   *
+   * @param transaction - The Up Bank transaction object
+   * @returns true if the transaction was processed, false if it was skipped (duplicate)
+   */
+  public async processSingleTransaction(
+    transaction: UpBankTransaction,
+  ): Promise<boolean> {
+    const externalId = transaction.id;
+
+    // Deduplication check
+    const exists = await this.spendingsRepository.findOne({
+      where: { externalId },
+    });
+    if (exists) {
+      console.log(`Skipping duplicate transaction ${externalId}`);
+      return false;
+    }
+
+    const amountVal = parseFloat(transaction.attributes.amount.value);
+    const categoryId = transaction.relationships.category?.data?.id || null;
+
+    const newSpending = this.spendingsRepository.create({
+      date: transaction.attributes.createdAt,
+      description: transaction.attributes.description,
+      amount: amountVal,
+      category: categoryId,
+      externalId: externalId,
+    });
+    await this.spendingsRepository.save(newSpending);
+    console.log(`Saved spending for transaction ${externalId}`);
+
+    await this.syncTransactionToNotion(transaction, amountVal);
+    return true;
+  }
+
   public async syncTransactionToNotion(t: any, amountVal: number) {
     try {
-      const databaseId = this.configService.get<string>('NOTION_DATABASE_ID');
+      const databaseId = this.configService.get<string>(
+        'NOTION_SPENDING_DATABASE_ID',
+      );
       if (databaseId) {
         await this.notionService.client.pages.create({
           parent: {

@@ -1,6 +1,12 @@
 import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { HttpService } from '@nestjs/axios';
+import { firstValueFrom } from 'rxjs';
 import * as crypto from 'crypto';
+import {
+  SpendingsService,
+  UpBankTransaction,
+} from '../spendings/spendings.service';
 
 /**
  * WebhookEventResource as received from Up Bank
@@ -40,18 +46,37 @@ export interface UpBankWebhookEvent {
   };
 }
 
+/**
+ * Response from Up Bank transaction API endpoint
+ */
+interface UpBankTransactionResponse {
+  data: UpBankTransaction;
+}
+
 @Injectable()
 export class UpBankWebhookService {
   private readonly logger = new Logger(UpBankWebhookService.name);
   private readonly webhookSecretKey: string | undefined;
+  private readonly upBankToken: string | undefined;
 
-  constructor(private readonly configService: ConfigService) {
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly httpService: HttpService,
+    private readonly spendingsService: SpendingsService,
+  ) {
     this.webhookSecretKey = this.configService.get<string>(
       'UP_BANK_WEBHOOK_SECRET',
     );
     if (!this.webhookSecretKey) {
       this.logger.warn(
         'UP_BANK_WEBHOOK_SECRET is not set. Webhook signature verification will fail.',
+      );
+    }
+
+    this.upBankToken = this.configService.get<string>('UP_BANK_TOKEN');
+    if (!this.upBankToken) {
+      this.logger.warn(
+        'UP_BANK_TOKEN is not set. Cannot fetch transaction details.',
       );
     }
   }
@@ -101,11 +126,34 @@ export class UpBankWebhookService {
   }
 
   /**
-   * Handles the TRANSACTION_SETTLED webhook event
+   * Fetches the full transaction details from Up Bank using the transaction link
+   *
+   * @param transactionLink - The API link to fetch transaction details
+   * @returns The full transaction object
+   */
+  private async fetchTransactionDetails(
+    transactionLink: string,
+  ): Promise<UpBankTransaction> {
+    if (!this.upBankToken) {
+      throw new Error('UP_BANK_TOKEN is not configured');
+    }
+
+    const response = await firstValueFrom(
+      this.httpService.get<UpBankTransactionResponse>(transactionLink, {
+        headers: { Authorization: `Bearer ${this.upBankToken}` },
+      }),
+    );
+
+    return response.data.data;
+  }
+
+  /**
+   * Handles the TRANSACTION_SETTLED webhook event.
+   * Fetches the full transaction details, persists as a spending, and syncs to Notion.
    *
    * @param event - The webhook event payload
    */
-  handleTransactionSettled(event: UpBankWebhookEvent): void {
+  async handleTransactionSettled(event: UpBankWebhookEvent): Promise<void> {
     const { data } = event;
     const transactionId = data.relationships.transaction?.data?.id;
     const transactionLink = data.relationships.transaction?.links?.related;
@@ -114,17 +162,37 @@ export class UpBankWebhookService {
       `Handling TRANSACTION_SETTLED event: ${data.id} for transaction: ${transactionId}`,
     );
 
-    // TODO: Implement the actual logic for handling transaction settled events
-    // This could include:
-    // 1. Fetching the full transaction details from Up Bank using the transactionLink
-    // 2. Saving or updating the transaction in the local database
-    // 3. Syncing with Notion or other services
-    // 4. Triggering notifications
+    if (!transactionLink) {
+      this.logger.error(
+        `No transaction link provided in webhook event ${data.id}`,
+      );
+      return;
+    }
 
-    // Placeholder for implementation
-    this.logger.log(
-      `Transaction ${transactionId} settled. Link: ${transactionLink}`,
-    );
+    try {
+      // Fetch the full transaction details from Up Bank
+      this.logger.log(`Fetching transaction details from: ${transactionLink}`);
+      const transaction = await this.fetchTransactionDetails(transactionLink);
+
+      // Process the transaction - persists to DB and syncs to Notion
+      const processed =
+        await this.spendingsService.processSingleTransaction(transaction);
+
+      if (processed) {
+        this.logger.log(
+          `Successfully processed settled transaction: ${transactionId}`,
+        );
+      } else {
+        this.logger.log(
+          `Transaction ${transactionId} was already processed (duplicate)`,
+        );
+      }
+    } catch (error) {
+      this.logger.error(
+        `Failed to process transaction ${transactionId}: ${error instanceof Error ? error.message : String(error)}`,
+      );
+      throw error;
+    }
   }
 
   /**
@@ -133,7 +201,7 @@ export class UpBankWebhookService {
    *
    * @param event - The webhook event payload
    */
-  processWebhookEvent(event: UpBankWebhookEvent): Promise<void> {
+  async processWebhookEvent(event: UpBankWebhookEvent): Promise<void> {
     const eventType = event.data.attributes.eventType;
     const eventId = event.data.id;
 
@@ -141,7 +209,7 @@ export class UpBankWebhookService {
 
     switch (eventType) {
       case 'TRANSACTION_SETTLED':
-        this.handleTransactionSettled(event);
+        await this.handleTransactionSettled(event);
         break;
       case 'TRANSACTION_CREATED':
         this.logger.debug(`Ignoring TRANSACTION_CREATED event: ${eventId}`);
@@ -160,7 +228,5 @@ export class UpBankWebhookService {
         );
       }
     }
-
-    return Promise.resolve();
   }
 }
