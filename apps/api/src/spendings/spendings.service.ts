@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Spending } from './spending.entity';
@@ -46,6 +46,8 @@ export interface UpBankTransaction {
 
 @Injectable()
 export class SpendingsService {
+  private readonly logger = new Logger(SpendingsService.name);
+
   constructor(
     @InjectRepository(Spending)
     private spendingsRepository: Repository<Spending>,
@@ -87,8 +89,8 @@ export class SpendingsService {
   }
 
   async syncUpBankTransactions() {
-    console.log('Starting Up Bank transaction sync...');
-    console.log('Cron schedule set to every 5 minutes');
+    this.logger.log('Starting Up Bank transaction sync...');
+    this.logger.debug('Cron schedule set to every 5 minutes');
     try {
       const latestDate = await this.findLatestTransactionDate();
       // If no latest date, default to a sensible past, e.g., 2024-01-01 or just don't pass filter[since] if API supports full history pagination (Up API does).
@@ -117,7 +119,7 @@ export class SpendingsService {
 
       // Iterate pages
       while (url) {
-        console.log(`Fetching transactions from ${url} with params`, params);
+        this.logger.debug(`Fetching transactions from ${url}`);
         // Note: when following 'next' link, params are usually part of the link, so we shouldn't pass them again if we are using the full URL from 'next'.
         // But for the FIRST call we pass params.
 
@@ -141,9 +143,9 @@ export class SpendingsService {
           for (const key in params) delete params[key];
         }
       }
-      console.log('Up Bank transaction sync completed.');
+      this.logger.log('Up Bank transaction sync completed.');
     } catch (error) {
-      console.error('Error syncing Up Bank transactions:', error);
+      this.logger.error('Error syncing Up Bank transactions:', error);
     }
   }
 
@@ -151,7 +153,7 @@ export class SpendingsService {
     for (const t of transactions) {
       await this.processSingleTransaction(t);
     }
-    console.log('All transactions persisted for current sync cycle');
+    this.logger.debug('All transactions persisted for current sync cycle');
   }
 
   /**
@@ -171,7 +173,7 @@ export class SpendingsService {
       where: { externalId },
     });
     if (exists) {
-      console.log(`Skipping duplicate transaction ${externalId}`);
+      this.logger.debug(`Skipping duplicate transaction ${externalId}`);
       return false;
     }
 
@@ -186,7 +188,7 @@ export class SpendingsService {
       externalId: externalId,
     });
     await this.spendingsRepository.save(newSpending);
-    console.log(`Saved spending for transaction ${externalId}`);
+    this.logger.log(`Saved spending for transaction ${externalId}`);
 
     await this.syncTransactionToNotion(transaction, amountVal);
     return true;
@@ -235,7 +237,10 @@ export class SpendingsService {
         });
       }
     } catch (error) {
-      console.error(`Failed to sync transaction ${t.id} to Notion:`, error);
+      this.logger.error(
+        `Failed to sync transaction ${String(t.id)} to Notion:`,
+        error,
+      );
     }
   }
 
