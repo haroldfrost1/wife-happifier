@@ -12,6 +12,7 @@ import { SpendingsModule } from './spendings/spendings.module';
 import { Spending } from './spendings/spending.entity';
 import { BudgetModule } from './budget/budget.module';
 import { RecurringPayment } from './budget/recurring-payment.entity';
+import { UpBankWebhookModule } from './upbank-webhook/upbank-webhook.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { RecurringPayment } from './budget/recurring-payment.entity';
     TransactionsModule,
     SpendingsModule,
     BudgetModule,
+    UpBankWebhookModule,
     ScheduleModule.forRoot(),
   ],
   controllers: [AppController],
